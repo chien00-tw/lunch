@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>午間節奏引導 v2.1.4</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Noto+Sans+TC:wght@500;700;900&display=swap');
+
+    body {
+      font-family: 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    
+    .font-digital {
+      font-family: 'Chakra Petch', 'Noto Sans TC', monospace;
+    }
+
+    /* 極致大字適應視窗 */
+    .huge-time {
+      font-size: clamp(5.5rem, 18vw, 15rem);
+      line-height: 0.95;
+    }
+
+    /* 隱藏原生滾動條但保留滑動 */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes subtle-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.02); opacity: 0.92; }
+    }
+    .animate-subtle {
+      animation: subtle-pulse 3s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between transition-colors duration-700 ease-in-out">
+
+  <!-- 頂部導航與超大圖示觸控按鈕列 -->
+  <header class="w-full px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-3 border-b-2 border-slate-800 bg-slate-950/90 backdrop-blur-md z-20">
+    <div class="flex items-center gap-3">
+      <div class="w-4 h-4 md:w-5 md:h-5 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50"></div>
+      <h1 class="text-xl md:text-3xl font-black tracking-wider text-slate-100 flex items-center gap-2">
+        午間節奏引導
+        <span class="text-xs md:text-sm px-3 py-1 rounded-full bg-slate-800 text-emerald-400 font-mono border border-emerald-500/30">v2.1.4</span>
+      </h1>
+    </div>
+
+    <!-- 超大純圖示觸控按鈕群組（附懸停 Tooltip） -->
+    <div class="flex items-center gap-2.5 md:gap-4">
+      <!-- 輪值名單按鈕 -->
+      <div class="relative group">
+        <button onclick="toggleDutyModal(true)" aria-label="今日輪值人員" class="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-100 border-2 border-slate-600 text-2xl md:text-3xl shadow-xl transition active:scale-95">
+          📋
+        </button>
+        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-slate-100 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
+          今日輪值人員
+        </div>
+      </div>
+
+      <!-- 行程編修按鈕 -->
+      <div class="relative group">
+        <button onclick="toggleScheduleModal(true)" aria-label="行程時間與內容編修" class="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-2xl bg-indigo-900/70 hover:bg-indigo-800 text-indigo-200 border-2 border-indigo-500/50 text-2xl md:text-3xl shadow-xl transition active:scale-95">
+          ⚙️
+        </button>
+        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-indigo-300 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
+          行程時間與內容編修
+        </div>
+      </div>
+
+      <!-- 提醒音效切換 -->
+      <div class="relative group">
+        <button onclick="toggleSound()" id="soundBtn" aria-label="切換音效" class="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border-2 border-slate-600 text-2xl md:text-3xl shadow-xl transition active:scale-95">
+          <span id="soundIcon">🔔</span>
+        </button>
+        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-slate-100 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
+          切換提醒音效
+        </div>
+      </div>
+
+      <!-- 全螢幕按鈕 -->
+      <div class="relative group">
+        <button onclick="toggleFullScreen()" id="fsBtn" aria-label="全螢幕切換" class="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-2xl md:text-3xl shadow-xl shadow-emerald-950/60 transition active:scale-95 border-2 border-emerald-400">
+          <span id="fsIcon">⛶</span>
+        </button>
+        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-emerald-300 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
+          全螢幕切換
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 週一至週五切換橫條 (緊密靠左) -->
+  <div class="w-full bg-slate-950/90 border-b border-slate-800 px-4 md:px-8 py-2.5 flex items-center justify-start flex-wrap gap-2 z-10">
+    <div class="flex items-center gap-2 flex-wrap">
+      <button onclick="switchWeekday(1)" id="btnDay-1" class="weekday-btn px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-black text-sm md:text-lg transition-all border-2">週一</button>
+      <button onclick="switchWeekday(2)" id="btnDay-2" class="weekday-btn px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-black text-sm md:text-lg transition-all border-2">週二 (含氟漱口水)</button>
+      <button onclick="switchWeekday(3)" id="btnDay-3" class="weekday-btn px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-black text-sm md:text-lg transition-all border-2">週三 (12:40放學)</button>
+      <button onclick="switchWeekday(4)" id="btnDay-4" class="weekday-btn px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-black text-sm md:text-lg transition-all border-2">週四</button>
+      <button onclick="switchWeekday(5)" id="btnDay-5" class="weekday-btn px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-black text-sm md:text-lg transition-all border-2">週五</button>
+    </div>
+  </div>
+
+  <!-- 主畫面儀表板 -->
+  <main class="flex-1 flex flex-col justify-center items-center px-4 md:px-8 py-3 md:py-6 relative">
+
+    <!-- 背景柔和光暈 -->
+    <div id="ambientGlow" class="absolute w-[600px] h-[600px] rounded-full bg-emerald-500/10 blur-[150px] pointer-events-none -z-10 transition-all duration-1000"></div>
+
+    <!-- 中央核心區：左側時鐘與階段，右側當日輪值人員看板 -->
+    <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-center my-auto">
+      
+      <!-- 左側：階段標籤、超大時間、極簡動作說明 -->
+      <div class="lg:col-span-7 flex flex-col items-center justify-center text-center">
+        <!-- 階段狀態膠囊標籤 -->
+        <div id="phaseBadgeContainer" class="mb-2 md:mb-4">
+          <div id="phaseTag" class="px-6 md:px-10 py-2.5 md:py-3.5 rounded-full text-xl md:text-3xl lg:text-4xl font-black tracking-wider uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 bg-emerald-600 text-white border-2 md:border-4 border-emerald-400">
+            <span id="phaseIcon" class="text-2xl md:text-4xl">🍲</span>
+            <span id="phaseTitle">盛飯打菜時間</span>
+          </div>
+        </div>
+
+        <!-- 超大核心時間顯示 (不顯示秒數) -->
+        <div class="flex flex-col items-center my-1 md:my-2">
+          <div id="clockDisplay" class="huge-time font-digital font-bold tracking-tight text-white drop-shadow-[0_12px_24px_rgba(0,0,0,0.8)] text-center select-none">
+            12:00
+          </div>
+          <!-- 極簡精準說明文字 -->
+          <div id="phaseSubtext" class="text-lg md:text-2xl font-bold text-slate-300 tracking-wide mt-2 text-center">
+            搬餐桶、準備餐具、盛裝飯菜
+          </div>
+        </div>
+      </div>
+
+      <!-- 右側：今日輪值人員看板 -->
+      <div class="lg:col-span-5 w-full">
+        <div class="bg-slate-950/80 rounded-3xl p-5 md:p-7 border-2 border-slate-800 shadow-2xl backdrop-blur-md flex flex-col justify-between">
+          <div class="flex items-center justify-between pb-3.5 mb-3.5 border-b-2 border-slate-800">
+            <div class="flex items-center gap-2.5 text-emerald-400 font-black text-xl md:text-2xl">
+              <span class="text-2xl md:text-3xl">📋</span>
+              <span>今日輪值人員</span>
+            </div>
+            <button onclick="toggleDutyModal(true)" class="text-sm md:text-base px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold border border-slate-700 transition active:scale-95 shadow-md" title="編輯名單">
+              ✏️ 編輯
+            </button>
+          </div>
+          <!-- 動態渲染工作分配卡片清單 -->
+          <div id="mainDutyDisplay" class="space-y-3 max-h-[420px] overflow-y-auto no-scrollbar">
+            <!-- 由 JavaScript 動態生成 -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 進度與剩餘時間卡片 -->
+    <div class="w-full max-w-5xl mt-3 md:mt-5 bg-slate-950/70 p-4 md:p-5 rounded-3xl border border-slate-800/80 shadow-2xl backdrop-blur-md">
+      <div class="flex justify-between items-center mb-2.5 text-sm md:text-lg font-bold">
+        <span class="text-slate-400 flex items-center gap-2">
+          <span>⏳ 距離本階段結束：</span>
+          <span id="countdownText" class="text-emerald-400 font-digital text-2xl md:text-3xl font-black tracking-wide">-- 分鐘</span>
+        </span>
+        <span class="text-slate-400 text-right">
+          下一階段：<span class="text-slate-200 font-bold" id="nextPhaseName">--</span>
+        </span>
+      </div>
+      <!-- 進度條軌道 -->
+      <div class="w-full h-4 md:h-5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-700/60">
+        <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- 關鍵節點提醒廣播橫幅 (觸發時動態顯示) -->
+    <div id="broadcastCard" class="w-full max-w-5xl mt-3 md:mt-5 hidden transform transition-all duration-500">
+      <div id="broadcastInner" class="rounded-3xl p-4 md:p-6 flex flex-col sm:flex-row items-center justify-between border-2 shadow-2xl gap-4 bg-amber-900/90 text-amber-100 border-amber-400">
+        <div class="flex items-center gap-3 text-left w-full sm:w-auto">
+          <span id="broadcastIcon" class="text-3xl md:text-5xl">⏰</span>
+          <div>
+            <div id="broadcastTitle" class="text-lg md:text-2xl font-black">提醒通知</div>
+            <div id="broadcastDetail" class="text-sm md:text-base font-medium opacity-90 mt-0.5">即將進入下一階段</div>
+          </div>
+        </div>
+        <button onclick="dismissBroadcast()" class="px-5 py-2.5 bg-black/40 hover:bg-black/60 rounded-xl text-sm md:text-base font-bold border border-white/20 transition self-end sm:self-center active:scale-95">
+          我知道了
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 底部版權宣告 -->
+  <footer class="w-full py-3.5 text-center text-xs md:text-sm text-slate-500 font-bold border-t border-slate-800/80 bg-slate-950/80">
+    班級百寶箱 | Design：S.C. Kuo
+  </footer>
+
+  <!-- 今日輪值人員設定彈窗 Modal -->
+  <div id="dutyModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden" onclick="handleBackdropClick(event, 'dutyModal')">
+    <div class="bg-slate-900 border-2 md:border-4 border-slate-700 w-full max-w-3xl rounded-3xl p-6 md:p-9 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center pb-4 border-b-2 border-slate-800">
+        <h2 class="text-2xl md:text-3xl font-black text-white flex items-center gap-3">
+          <span>📋</span> 今日輪值人員
+        </h2>
+        <button onclick="toggleDutyModal(false)" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-2xl font-black border border-slate-700 transition active:scale-95">✕</button>
+      </div>
+
+      <!-- 動態工作列表區塊 -->
+      <div class="my-4 overflow-y-auto space-y-4 no-scrollbar pr-1 flex-1" id="dutyItemsContainer">
+        <!-- JS 動態渲染 -->
+      </div>
+
+      <div class="pt-4 flex flex-wrap justify-between items-center border-t-2 border-slate-800 gap-4">
+        <button onclick="addDutyItem()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold rounded-xl border border-emerald-500/40 text-sm md:text-base transition active:scale-95">
+          + 新增工作項目
+        </button>
+        <button onclick="saveDutyList()" class="px-7 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg text-base md:text-lg transition active:scale-95">
+          儲存並更新名單
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行程時間與內容編修 Modal -->
+  <div id="scheduleModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden" onclick="handleBackdropClick(event, 'scheduleModal')">
+    <div class="bg-slate-900 border-2 md:border-4 border-slate-700 w-full max-w-4xl rounded-3xl p-6 md:p-8 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center pb-4 border-b-2 border-slate-800">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-black text-white flex items-center gap-3">
+            <span>⚙️</span> 行程時間與內容編修
+          </h2>
+          <p class="text-slate-400 text-xs md:text-sm mt-1">
+            目前編輯：<span id="scheduleModalDayLabel" class="text-indigo-400 font-bold">週一</span> 之排程
+          </p>
+        </div>
+        <button onclick="toggleScheduleModal(false)" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-2xl font-black border border-slate-700 transition active:scale-95">✕</button>
+      </div>
+
+      <!-- 動態行程階段清單 -->
+      <div class="my-4 overflow-y-auto space-y-4 no-scrollbar pr-1 flex-1" id="scheduleItemsContainer">
+        <!-- JS 動態渲染 -->
+      </div>
+
+      <div class="pt-4 flex flex-wrap justify-between items-center border-t-2 border-slate-800 gap-3">
+        <div class="flex items-center gap-2">
+          <button onclick="addSchedulePhase()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-indigo-300 font-bold rounded-xl border border-indigo-500/40 text-sm md:text-base transition active:scale-95">
+            + 新增時段
+          </button>
+          <button onclick="resetScheduleToDefault()" class="px-4 py-2 bg-slate-800 hover:bg-rose-950/60 text-rose-300 font-bold rounded-xl border border-rose-500/40 text-sm md:text-base transition active:scale-95">
+            恢復預設行程
+          </button>
+        </div>
+        <button onclick="saveScheduleList()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg text-base md:text-lg transition active:scale-95">
+          儲存並套用行程
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript 核心邏輯 -->
+  <script>
+    /* =================================================================
+       狀態與資料模型 (週一至週五專屬排程與全域配置)
+       ================================================================= */
+    let currentWeekday = 1;
+    let soundEnabled = true;
+    let lastAlertKey = null;
+    let audioCtx = null;
+
+    // 工作內容與輪值人員預設清單
+    let dutyData = [
+      { id: 1, title: "午餐小組搬餐桶並就位", members: "01 號、02 號" },
+      { id: 2, title: "主食分配（飯 / 麵）", members: "03 號、07 號" },
+      { id: 3, title: "主菜分配", members: "12 號、15 號" },
+      { id: 4, title: "副菜分配", members: "18 號、22 號" },
+      { id: 5, title: "湯品引導", members: "25 號" },
+      { id: 6, title: "餐檯整理與地板清潔", members: "09 號、10 號" }
+    ];
+
+    // 週一、週四、週五常規通用排程
+    const DEFAULT_GENERAL_SCHEDULE = [
+      {
+        start: "12:00",
+        end: "12:15",
+        title: "盛飯打菜時間",
+        icon: "🍲",
+        subtext: "搬餐桶、準備餐具、盛裝飯菜",
+        colorClass: "bg-emerald-600 text-white border-emerald-400",
+        barColor: "from-emerald-500 to-teal-400",
+        glowColor: "rgba(16, 185, 129, 0.2)"
+      },
+      {
+        start: "12:15",
+        end: "12:30",
+        title: "安靜用餐時間",
+        icon: "🍱",
+        subtext: "享用午餐、嚴禁聊天",
+        colorClass: "bg-blue-600 text-white border-blue-400",
+        barColor: "from-blue-500 to-cyan-400",
+        glowColor: "rgba(59, 130, 246, 0.2)"
+      },
+      {
+        start: "12:30",
+        end: "12:40",
+        title: "環境整理與潔牙",
+        icon: "🧹",
+        subtext: "擦拭桌面、清潔地板、潔牙漱口",
+        colorClass: "bg-teal-600 text-white border-teal-400",
+        barColor: "from-teal-500 to-emerald-400",
+        glowColor: "rgba(20, 184, 166, 0.2)"
+      },
+      {
+        start: "12:40",
+        end: "12:50",
+        title: "預備午休時間",
+        icon: "🚰",
+        subtext: "訂正作業、準備下午上課用品",
+        colorClass: "bg-indigo-600 text-white border-indigo-400",
+        barColor: "from-indigo-500 to-purple-400",
+        glowColor: "rgba(99, 102, 241, 0.25)"
+      },
+      {
+        start: "12:50",
+        end: "13:20",
+        title: "熄燈休息時間",
+        icon: "🌙",
+        subtext: "拉窗簾、熄燈、安靜休息",
+        colorClass: "bg-purple-900 text-purple-200 border-purple-500",
+        barColor: "from-purple-600 to-indigo-800",
+        glowColor: "rgba(147, 51, 234, 0.15)"
+      }
+    ];
+
+    // 週二專屬排程（含氟漱口水）
+    const DEFAULT_TUESDAY_SCHEDULE = [
+      {
+        start: "12:00",
+        end: "12:15",
+        title: "盛飯打菜時間",
+        icon: "🍲",
+        subtext: "搬餐桶、準備餐具、盛裝飯菜",
+        colorClass: "bg-emerald-600 text-white border-emerald-400",
+        barColor: "from-emerald-500 to-teal-400",
+        glowColor: "rgba(16, 185, 129, 0.2)"
+      },
+      {
+        start: "12:15",
+        end: "12:30",
+        title: "安靜用餐時間",
+        icon: "🍱",
+        subtext: "享用午餐、嚴禁聊天",
+        colorClass: "bg-blue-600 text-white border-blue-400",
+        barColor: "from-blue-500 to-cyan-400",
+        glowColor: "rgba(59, 130, 246, 0.2)"
+      },
+      {
+        start: "12:30",
+        end: "12:40",
+        title: "環境整理與潔牙 (含氟漱口水)",
+        icon: "🪥",
+        subtext: "擦拭桌面、清潔地板、使用含氟漱口水與潔牙",
+        colorClass: "bg-teal-600 text-white border-teal-400",
+        barColor: "from-teal-500 to-emerald-400",
+        glowColor: "rgba(20, 184, 166, 0.2)"
+      },
+      {
+        start: "12:40",
+        end: "12:50",
+        title: "預備午休時間",
+        icon: "🚰",
+        subtext: "訂正作業、準備下午上課用品",
+        colorClass: "bg-indigo-600 text-white border-indigo-400",
+        barColor: "from-indigo-500 to-purple-400",
+        glowColor: "rgba(99, 102, 241, 0.25)"
+      },
+      {
+        start: "12:50",
+        end: "13:20",
+        title: "熄燈休息時間",
+        icon: "🌙",
+        subtext: "拉窗簾、熄燈、安靜休息",
+        colorClass: "bg-purple-900 text-purple-200 border-purple-500",
+        barColor: "from-purple-600 to-indigo-800",
+        glowColor: "rgba(147, 51, 234, 0.15)"
+      }
+    ];
+
+    // 週三專屬排程（無午休，12:40-12:50 放學）
+    const DEFAULT_WEDNESDAY_SCHEDULE = [
+      {
+        start: "12:00",
+        end: "12:15",
+        title: "盛飯打菜時間",
+        icon: "🍲",
+        subtext: "搬餐桶、準備餐具、盛裝飯菜",
+        colorClass: "bg-emerald-600 text-white border-emerald-400",
+        barColor: "from-emerald-500 to-teal-400",
+        glowColor: "rgba(16, 185, 129, 0.2)"
+      },
+      {
+        start: "12:15",
+        end: "12:30",
+        title: "安靜用餐時間",
+        icon: "🍱",
+        subtext: "享用午餐、嚴禁聊天",
+        colorClass: "bg-blue-600 text-white border-blue-400",
+        barColor: "from-blue-500 to-cyan-400",
+        glowColor: "rgba(59, 130, 246, 0.2)"
+      },
+      {
+        start: "12:30",
+        end: "12:40",
+        title: "環境整理與潔牙",
+        icon: "🧹",
+        subtext: "擦拭桌面、清潔地板、潔牙漱口",
+        colorClass: "bg-teal-600 text-white border-teal-400",
+        barColor: "from-teal-500 to-emerald-400",
+        glowColor: "rgba(20, 184, 166, 0.2)"
+      },
+      {
+        start: "12:40",
+        end: "12:50",
+        title: "🎒 放學時間",
+        icon: "🎒",
+        subtext: "收拾書包、檢查抽屜、準備放學",
+        colorClass: "bg-amber-600 text-white border-amber-400",
+        barColor: "from-amber-500 to-yellow-400",
+        glowColor: "rgba(245, 158, 11, 0.25)"
+      }
+    ];
+
+    // 各星期實際運作資料結構（深拷貝預設值）
+    let weeklySchedules = {
+      1: JSON.parse(JSON.stringify(DEFAULT_GENERAL_SCHEDULE)),
+      2: JSON.parse(JSON.stringify(DEFAULT_TUESDAY_SCHEDULE)),
+      3: JSON.parse(JSON.stringify(DEFAULT_WEDNESDAY_SCHEDULE)),
+      4: JSON.parse(JSON.stringify(DEFAULT_GENERAL_SCHEDULE)),
+      5: JSON.parse(JSON.stringify(DEFAULT_GENERAL_SCHEDULE))
+    };
+
+    // 工具函數：時間字串轉分鐘數
+    function timeToMinutes(tStr) {
+      if (!tStr) return 0;
+      const parts = tStr.split(':').map(Number);
+      return parts[0] * 60 + (parts[1] || 0);
+    }
+
+    /* =================================================================
+       Web Audio API 柔和純淨提示音
+       ================================================================= */
+    function initAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          audioCtx = new AudioContext();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playChime(isAlert = true) {
+      if (!soundEnabled) return;
+      initAudioContext();
+      if (!audioCtx) return;
+
+      try {
+        const now = audioCtx.currentTime;
+        const notes = isAlert ? [523.25, 659.25, 783.99, 1046.50] : [440, 554.37, 659.25];
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+          gain.gain.setValueAtTime(0.001, now + idx * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.18, now + idx * 0.12 + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 0.9);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + idx * 0.12);
+          osc.stop(now + idx * 0.12 + 1.0);
+        });
+      } catch (e) {
+        console.warn("音訊播放被瀏覽器限制", e);
+      }
+    }
+
+    function toggleSound() {
+      initAudioContext();
+      soundEnabled = !soundEnabled;
+      const icon = document.getElementById('soundIcon');
+      const btn = document.getElementById('soundBtn');
+      if (soundEnabled) {
+        icon.textContent = "🔔";
+        btn.classList.replace('text-slate-500', 'text-slate-200');
+        playChime(false);
+      } else {
+        icon.textContent = "🔕";
+        btn.classList.replace('text-slate-200', 'text-slate-500');
+      }
+    }
+
+    /* =================================================================
+       全螢幕與視窗互動
+       ================================================================= */
+    function toggleFullScreen() {
+      initAudioContext();
+      const fsIcon = document.getElementById('fsIcon');
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        const docElm = document.documentElement;
+        if (docElm.requestFullscreen) {
+          docElm.requestFullscreen();
+        } else if (docElm.webkitRequestFullscreen) {
+          docElm.webkitRequestFullscreen();
+        }
+        if (fsIcon) fsIcon.textContent = "🗗";
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+        if (fsIcon) fsIcon.textContent = "⛶";
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      const fsIcon = document.getElementById('fsIcon');
+      if (fsIcon) {
+        fsIcon.textContent = document.fullscreenElement ? "🗗" : "⛶";
+      }
+    });
+
+    function handleBackdropClick(e, modalId) {
+      if (e.target.id === modalId) {
+        if (modalId === 'dutyModal') toggleDutyModal(false);
+        if (modalId === 'scheduleModal') toggleScheduleModal(false);
+      }
+    }
+
+    /* =================================================================
+       星期切換邏輯
+       ================================================================= */
+    function switchWeekday(day) {
+      initAudioContext();
+      currentWeekday = day;
+      lastAlertKey = null; // 重置警示以便當前時段重新判定
+
+      // 更新按鈕外觀樣式
+      for (let d = 1; d <= 5; d++) {
+        const btn = document.getElementById(`btnDay-${d}`);
+        if (!btn) continue;
+        if (d === day) {
+          btn.className = "weekday-btn px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-black text-sm md:text-lg transition-all border-2 bg-emerald-600 text-white border-emerald-400 shadow-lg shadow-emerald-950/60 scale-105";
+        } else {
+          btn.className = "weekday-btn px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-black text-sm md:text-lg transition-all border-2 bg-slate-900/90 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white";
+        }
+      }
+
+      updateRhythm();
+    }
+
+    /* =================================================================
+       核心節奏計算與畫面渲染
+       ================================================================= */
+    function updateRhythm() {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      const currentTotalMinutes = currentHour * 60 + currentMinute;
+
+      const formattedHour = String(currentHour).padStart(2, '0');
+      const formattedMinute = String(currentMinute).padStart(2, '0');
+      const timeKey = `${formattedHour}:${formattedMinute}`;
+
+      // 更新時鐘文字 (HH:MM)
+      const clockEl = document.getElementById('clockDisplay');
+      if (clockEl) clockEl.textContent = timeKey;
+
+      const schedule = weeklySchedules[currentWeekday] || weeklySchedules[1];
+      let currentPhase = null;
+      let currentIndex = -1;
+
+      // 檢查當前符合之時段
+      for (let i = 0; i < schedule.length; i++) {
+        const pStart = timeToMinutes(schedule[i].start);
+        const pEnd = timeToMinutes(schedule[i].end);
+        if (currentTotalMinutes >= pStart && currentTotalMinutes < pEnd) {
+          currentPhase = schedule[i];
+          currentIndex = i;
+          break;
+        }
+      }
+
+      const phaseTag = document.getElementById('phaseTag');
+      const phaseIcon = document.getElementById('phaseIcon');
+      const phaseTitle = document.getElementById('phaseTitle');
+      const phaseSubtext = document.getElementById('phaseSubtext');
+      const countdownText = document.getElementById('countdownText');
+      const nextPhaseName = document.getElementById('nextPhaseName');
+      const progressBar = document.getElementById('progressBar');
+      const ambientGlow = document.getElementById('ambientGlow');
+
+      // 非排程時段判定 (12:00 前 或 放學/午休後)
+      if (!currentPhase) {
+        const firstStart = schedule.length > 0 ? timeToMinutes(schedule[0].start) : 12 * 60;
+        const lastEnd = schedule.length > 0 ? timeToMinutes(schedule[schedule.length - 1].end) : 13 * 60 + 20;
+
+        if (currentTotalMinutes < firstStart) {
+          const diff = firstStart - currentTotalMinutes;
+          phaseTag.className = "px-6 md:px-10 py-2.5 md:py-3.5 rounded-full text-xl md:text-3xl font-black uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 bg-slate-800 text-slate-300 border-2 border-slate-600";
+          phaseIcon.textContent = "⏰";
+          phaseTitle.textContent = "準備午餐時間";
+          phaseSubtext.textContent = `距離午餐開始還有 ${diff} 分鐘`;
+          countdownText.textContent = `${diff} 分鐘`;
+          nextPhaseName.textContent = schedule.length > 0 ? schedule[0].title : "--";
+          progressBar.style.width = "0%";
+          ambientGlow.style.backgroundColor = "rgba(16, 185, 129, 0.05)";
+        } else {
+          phaseTag.className = "px-6 md:px-10 py-2.5 md:py-3.5 rounded-full text-xl md:text-3xl font-black uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 bg-slate-800 text-slate-400 border-2 border-slate-700";
+          phaseIcon.textContent = "✨";
+          phaseTitle.textContent = "午休結束";
+          phaseSubtext.textContent = currentWeekday === 3 ? "放學回家、注意交通安全" : "午休結束、精神飽滿迎接下午課程";
+          countdownText.textContent = "已結束";
+          nextPhaseName.textContent = "下午課堂";
+          progressBar.style.width = "100%";
+          ambientGlow.style.backgroundColor = "rgba(99, 102, 241, 0.08)";
+        }
+
+        checkSpecialAlerts(timeKey);
+        return;
+      }
+
+      // 正常排程時段渲染
+      phaseTag.className = `px-6 md:px-10 py-2.5 md:py-3.5 rounded-full text-xl md:text-3xl lg:text-4xl font-black uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 border-2 md:border-4 ${currentPhase.colorClass || 'bg-emerald-600 text-white border-emerald-400'}`;
+      phaseIcon.textContent = currentPhase.icon || "⏳";
+      phaseTitle.textContent = currentPhase.title;
+      phaseSubtext.textContent = currentPhase.subtext;
+
+      const pStart = timeToMinutes(currentPhase.start);
+      const pEnd = timeToMinutes(currentPhase.end);
+      const minutesLeft = pEnd - currentTotalMinutes;
+      const totalDuration = pEnd - pStart;
+      const elapsed = currentTotalMinutes - pStart;
+      const percent = totalDuration > 0 ? Math.min(100, Math.max(0, (elapsed / totalDuration) * 100)) : 100;
+
+      countdownText.textContent = `${minutesLeft} 分鐘`;
+      progressBar.style.width = `${percent}%`;
+      progressBar.className = `h-full bg-gradient-to-r ${currentPhase.barColor || 'from-emerald-500 to-teal-400'} rounded-full transition-all duration-500 ease-out`;
+      ambientGlow.style.backgroundColor = currentPhase.glowColor || 'rgba(16, 185, 129, 0.2)';
+
+      if (currentIndex < schedule.length - 1) {
+        nextPhaseName.textContent = schedule[currentIndex + 1].title;
+      } else {
+        nextPhaseName.textContent = currentWeekday === 3 ? "放學時間" : "下午課程";
+      }
+
+      checkSpecialAlerts(timeKey);
+    }
+
+    /* =================================================================
+       特殊節點提醒廣播（12:27、12:37、12:47）
+       ================================================================= */
+    function checkSpecialAlerts(timeKey) {
+      if (lastAlertKey === timeKey) return;
+
+      let alertData = null;
+
+      if (timeKey === "12:27") {
+        if (currentWeekday === 2) {
+          alertData = {
+            title: "🪥 12:27 潔牙與含氟漱口水提醒",
+            detail: "用餐時間即將結束，請準備收拾個人餐具，並配合使用含氟漱口水與潔牙！",
+            bg: "bg-teal-950/95 text-teal-100 border-teal-400"
+          };
+        } else {
+          alertData = {
+            title: "🪥 12:27 準備收拾與潔牙提醒",
+            detail: "用餐時間即將結束，請放慢收尾，準備收拾個人餐具與潔牙！",
+            bg: "bg-amber-950/95 text-amber-100 border-amber-400"
+          };
+        }
+      } else if (timeKey === "12:37") {
+        if (currentWeekday === 3) {
+          alertData = {
+            title: "🎒 12:37 放學預備提醒",
+            detail: "整理工作即將截止！12:40 即將放學，請完成手邊工作並收拾書包準備放學。",
+            bg: "bg-amber-950/95 text-amber-100 border-amber-400"
+          };
+        } else {
+          alertData = {
+            title: "⏰ 12:37 午休預備提醒",
+            detail: "環境整理即將截止！請加快動作，完成如廁洗手，準備午休！",
+            bg: "bg-indigo-950/95 text-indigo-100 border-indigo-400"
+          };
+        }
+      } else if (timeKey === "12:47") {
+        if (currentWeekday !== 3) {
+          alertData = {
+            title: "💤 12:47 桌面清空，熄燈休息提醒",
+            detail: "請將桌面完全清空，值日生準備拉上窗簾並熄燈，全班安靜休息！",
+            bg: "bg-purple-950/95 text-purple-100 border-purple-400"
+          };
+        }
+      }
+
+      if (alertData) {
+        showBroadcast(alertData.title, alertData.detail, alertData.bg);
+        playChime(true);
+        lastAlertKey = timeKey;
+      }
+    }
+
+    function showBroadcast(title, detail, bgClass) {
+      const card = document.getElementById('broadcastCard');
+      const inner = document.getElementById('broadcastInner');
+      document.getElementById('broadcastTitle').textContent = title;
+      document.getElementById('broadcastDetail').textContent = detail;
+      inner.className = `rounded-3xl p-4 md:p-6 flex flex-col sm:flex-row items-center justify-between border-2 shadow-2xl gap-4 ${bgClass}`;
+      card.classList.remove('hidden');
+    }
+
+    function dismissBroadcast() {
+      const card = document.getElementById('broadcastCard');
+      if (card) card.classList.add('hidden');
+    }
+
+    /* =================================================================
+       今日輪值看板與編輯彈窗
+       ================================================================= */
+    function renderDutyBoard() {
+      const container = document.getElementById('mainDutyDisplay');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (dutyData.length === 0) {
+        container.innerHTML = `<div class="text-slate-500 text-center py-4 font-bold text-sm md:text-base">尚未設定工作項目，請點擊右上角編輯新增</div>`;
+        return;
+      }
+
+      dutyData.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = "flex items-center justify-between py-1.5 md:py-2 px-3 md:px-3.5 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition shadow-sm gap-2";
+        card.innerHTML = `
+          <div class="font-bold text-slate-100 text-xs md:text-sm lg:text-base flex items-center gap-2 flex-1 min-w-0">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 flex-shrink-0 shadow-sm shadow-emerald-400/50"></span>
+            <span class="break-words leading-tight">${item.title || '未命名工作'}</span>
+          </div>
+          <div class="font-mono font-black text-emerald-300 text-xs md:text-sm lg:text-base px-2.5 py-1 bg-emerald-950/70 rounded-lg border border-emerald-500/40 whitespace-nowrap shadow-inner flex-shrink-0">
+            ${item.members ? item.members : '未指定'}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderDutyListInputs() {
+      const container = document.getElementById('dutyItemsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      dutyData.forEach((item, index) => {
+        const itemRow = document.createElement('div');
+        itemRow.className = "bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700 flex flex-col sm:flex-row gap-3 items-center";
+        itemRow.innerHTML = `
+          <div class="w-full sm:w-5/12">
+            <label class="block text-xs font-bold text-emerald-400 mb-1">工作內容</label>
+            <input type="text" value="${item.title}" oninput="dutyData[${index}].title = this.value" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:outline-none focus:border-emerald-500" placeholder="工作名稱">
+          </div>
+          <div class="w-full sm:w-6/12">
+            <label class="block text-xs font-bold text-cyan-400 mb-1">負責座號 / 姓名</label>
+            <input type="text" value="${item.members}" oninput="dutyData[${index}].members = this.value" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-medium focus:outline-none focus:border-cyan-500" placeholder="座號或姓名">
+          </div>
+          <div class="w-full sm:w-1/12 flex justify-end sm:justify-center pt-1 sm:pt-4">
+            <button onclick="removeDutyItem(${index})" class="w-9 h-9 flex items-center justify-center rounded-xl bg-rose-950/40 border border-rose-800/50 text-rose-400 hover:text-rose-300 font-bold text-lg transition active:scale-95" title="刪除此項目">✕</button>
+          </div>
+        `;
+        container.appendChild(itemRow);
+      });
+    }
+
+    function addDutyItem() {
+      dutyData.push({ id: Date.now(), title: "新工作項目", members: "" });
+      renderDutyListInputs();
+    }
+
+    function removeDutyItem(index) {
+      dutyData.splice(index, 1);
+      renderDutyListInputs();
+    }
+
+    function toggleDutyModal(show) {
+      initAudioContext();
+      const modal = document.getElementById('dutyModal');
+      if (show) {
+        renderDutyListInputs();
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function saveDutyList() {
+      toggleDutyModal(false);
+      renderDutyBoard();
+    }
+
+    /* =================================================================
+       行程時間與內容編修
+       ================================================================= */
+    const WEEKDAY_NAMES = { 1: "週一", 2: "週二", 3: "週三", 4: "週四", 5: "週五" };
+
+    function toggleScheduleModal(show) {
+      initAudioContext();
+      const modal = document.getElementById('scheduleModal');
+      if (show) {
+        document.getElementById('scheduleModalDayLabel').textContent = WEEKDAY_NAMES[currentWeekday] || "週一";
+        renderScheduleInputs();
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function renderScheduleInputs() {
+      const container = document.getElementById('scheduleItemsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const currentList = weeklySchedules[currentWeekday] || [];
+
+      if (currentList.length === 0) {
+        container.innerHTML = `<div class="text-slate-400 text-center py-6">目前無任何時段，請點擊下方新增。</div>`;
+        return;
+      }
+
+      currentList.forEach((phase, idx) => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-800/90 p-4 rounded-2xl border border-slate-700 flex flex-col gap-3";
+        card.innerHTML = `
+          <div class="flex items-center justify-between gap-3 border-b border-slate-700/60 pb-2">
+            <span class="text-sm font-bold text-indigo-300 flex items-center gap-1.5">
+              <span>階段 ${idx + 1}</span>
+              <input type="text" value="${phase.icon || '🍲'}" oninput="updatePhaseField(${idx}, 'icon', this.value)" class="w-10 text-center bg-slate-900 border border-slate-700 rounded-lg py-0.5 text-base" title="階段圖示">
+            </span>
+            <button onclick="removeSchedulePhase(${idx})" class="text-rose-400 hover:text-rose-300 font-bold text-sm px-2.5 py-1 bg-rose-950/40 rounded-lg border border-rose-800/40 transition active:scale-95">
+              刪除階段
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 mb-1">開始時間 (HH:MM)</label>
+              <input type="time" value="${phase.start}" oninput="updatePhaseField(${idx}, 'start', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono font-bold focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-400 mb-1">結束時間 (HH:MM)</label>
+              <input type="time" value="${phase.end}" oninput="updatePhaseField(${idx}, 'end', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono font-bold focus:outline-none focus:border-indigo-500">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-400 mb-1">階段名稱</label>
+              <input type="text" value="${phase.title}" oninput="updatePhaseField(${idx}, 'title', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none focus:border-indigo-500" placeholder="階段名稱">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-400 mb-1">動作說明內容</label>
+            <input type="text" value="${phase.subtext}" oninput="updatePhaseField(${idx}, 'subtext', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 font-medium focus:outline-none focus:border-indigo-500" placeholder="階段詳細說明">
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updatePhaseField(idx, field, value) {
+      if (weeklySchedules[currentWeekday] && weeklySchedules[currentWeekday][idx]) {
+        weeklySchedules[currentWeekday][idx][field] = value;
+      }
+    }
+
+    function addSchedulePhase() {
+      if (!weeklySchedules[currentWeekday]) weeklySchedules[currentWeekday] = [];
+      const currentList = weeklySchedules[currentWeekday];
+      let newStart = "12:00";
+      if (currentList.length > 0) {
+        newStart = currentList[currentList.length - 1].end;
+      }
+      currentList.push({
+        start: newStart,
+        end: "12:50",
+        title: "新時段項目",
+        icon: "⏱️",
+        subtext: "請自訂動作說明",
+        colorClass: "bg-indigo-600 text-white border-indigo-400",
+        barColor: "from-indigo-500 to-purple-400",
+        glowColor: "rgba(99, 102, 241, 0.2)"
+      });
+      renderScheduleInputs();
+    }
+
+    function removeSchedulePhase(idx) {
+      if (weeklySchedules[currentWeekday]) {
+        weeklySchedules[currentWeekday].splice(idx, 1);
+        renderScheduleInputs();
+      }
+    }
+
+    function resetScheduleToDefault() {
+      if (currentWeekday === 2) {
+        weeklySchedules[2] = JSON.parse(JSON.stringify(DEFAULT_TUESDAY_SCHEDULE));
+      } else if (currentWeekday === 3) {
+        weeklySchedules[3] = JSON.parse(JSON.stringify(DEFAULT_WEDNESDAY_SCHEDULE));
+      } else {
+        weeklySchedules[currentWeekday] = JSON.parse(JSON.stringify(DEFAULT_GENERAL_SCHEDULE));
+      }
+      renderScheduleInputs();
+    }
+
+    function saveScheduleList() {
+      toggleScheduleModal(false);
+      lastAlertKey = null;
+      updateRhythm();
+    }
+
+    /* =================================================================
+       快捷鍵與全域事件監聽
+       ================================================================= */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        toggleScheduleModal(false);
+        toggleDutyModal(false);
+        dismissBroadcast();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // 一次性點擊喚醒 AudioContext
+      const unlockAudio = () => {
+        initAudioContext();
+        window.removeEventListener('click', unlockAudio);
+        window.removeEventListener('touchstart', unlockAudio);
+      };
+      window.addEventListener('click', unlockAudio);
+      window.addEventListener('touchstart', unlockAudio);
+
+      // 自動依今日真實星期設定預設值（週末預設為週一）
+      const today = new Date().getDay();
+      if (today >= 1 && today <= 5) {
+        currentWeekday = today;
+      } else {
+        currentWeekday = 1;
+      }
+
+      switchWeekday(currentWeekday);
+      renderDutyBoard();
+      updateRhythm();
+      setInterval(updateRhythm, 1000);
+    });
+  </script>
+</body>
+</html>

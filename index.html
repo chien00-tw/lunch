@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>午間節奏引導 v2.2.1</title>
+  <title>午間節奏引導 v2.3.2</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -57,20 +57,20 @@
       <div class="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50"></div>
       <h1 class="text-lg md:text-2xl font-black tracking-wider text-slate-100 flex items-center gap-2">
         午間節奏引導
-        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-mono border border-emerald-500/30">v2.2.1</span>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-mono border border-emerald-500/30">v2.3.2</span>
         <span id="simBadge" class="hidden text-xs px-2.5 py-0.5 rounded-full bg-amber-900/80 text-amber-300 font-bold border border-amber-500/50 animate-pulse">測試中</span>
       </h1>
     </div>
 
     <!-- 超大純圖示觸控按鈕群組（附懸停 Tooltip） -->
     <div class="flex items-center gap-2 md:gap-3">
-      <!-- 測試模擬按鈕 -->
+      <!-- 全螢幕按鈕 (已與測試模式按鈕位置互換) -->
       <div class="relative group">
-        <button onclick="toggleTestModal(true)" aria-label="時間效果試閱" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-amber-950/70 hover:bg-amber-800/80 text-amber-200 border-2 border-amber-500/50 text-xl md:text-2xl shadow-xl transition active:scale-95">
-          ⏱️
+        <button onclick="toggleFullScreen()" id="fsBtn" aria-label="全螢幕切換" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xl md:text-2xl shadow-xl shadow-emerald-950/60 transition active:scale-95 border-2 border-emerald-400">
+          <span id="fsIcon">⛶</span>
         </button>
-        <div class="absolute -bottom-9 left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-800 text-amber-300 text-xs font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
-          時間效果試閱（測試模式）
+        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-emerald-300 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
+          全螢幕切換
         </div>
       </div>
 
@@ -104,13 +104,13 @@
         </div>
       </div>
 
-      <!-- 全螢幕按鈕 -->
+      <!-- 測試模擬按鈕 (已與全螢幕按鈕位置互換) -->
       <div class="relative group">
-        <button onclick="toggleFullScreen()" id="fsBtn" aria-label="全螢幕切換" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xl md:text-2xl shadow-xl shadow-emerald-950/60 transition active:scale-95 border-2 border-emerald-400">
-          <span id="fsIcon">⛶</span>
+        <button onclick="toggleTestModal(true)" aria-label="時間效果試閱" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-amber-950/70 hover:bg-amber-800/80 text-amber-200 border-2 border-amber-500/50 text-xl md:text-2xl shadow-xl transition active:scale-95">
+          ⏱️
         </button>
-        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-emerald-300 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
-          全螢幕切換
+        <div class="absolute -bottom-9 left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-800 text-amber-300 text-xs font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
+          時間效果試閱（測試模式）
         </div>
       </div>
     </div>
@@ -157,7 +157,7 @@
         </div>
       </div>
 
-      <!-- 右側：今日輪值人員看板 (單一欄位大字體座號) -->
+      <!-- 右側：今日輪值人員看板 (單一欄位大字體純數字座號) -->
       <div class="lg:col-span-5 w-full flex flex-col justify-center">
         <div class="bg-slate-950/85 rounded-3xl p-4 md:p-6 border-2 border-slate-800 shadow-2xl backdrop-blur-md flex flex-col justify-between">
           <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b-2 border-slate-800">
@@ -166,7 +166,7 @@
               <span>今日輪值人員</span>
             </div>
             <button onclick="toggleDutyModal(true)" class="text-xs md:text-sm px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold border border-slate-700 transition active:scale-95 shadow-md" title="設定座號">
-              ✏️ 輸入座號
+              ✏️ 選擇座號
             </button>
           </div>
           <!-- 單一欄位大字體輪值座號展示區 -->
@@ -175,8 +175,8 @@
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span>負責學生座號</span>
             </div>
-            <div id="mainDutyDisplay" class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black font-digital text-emerald-300 tracking-wider break-words leading-snug max-w-full">
-              01 號、02 號、03 號、04 號
+            <div id="mainDutyDisplay" class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-digital text-emerald-300 tracking-wider break-words leading-snug max-w-full">
+              01、02、03、04
             </div>
             <div class="text-xs text-slate-500 font-medium mt-2">
               請輪值同學迅速就位並協助午間各項工作
@@ -229,18 +229,33 @@
 
   <!-- 今日輪值人員設定彈窗 Modal -->
   <div id="dutyModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden" onclick="handleBackdropClick(event, 'dutyModal')">
-    <div class="bg-slate-900 border-2 md:border-4 border-slate-700 w-full max-w-lg rounded-3xl p-6 shadow-2xl overflow-hidden flex flex-col" onclick="event.stopPropagation()">
+    <div class="bg-slate-900 border-2 md:border-4 border-slate-700 w-full max-w-xl rounded-3xl p-5 md:p-6 shadow-2xl overflow-hidden flex flex-col" onclick="event.stopPropagation()">
       <div class="flex justify-between items-center pb-3 border-b-2 border-slate-800">
         <h2 class="text-lg md:text-2xl font-black text-white flex items-center gap-2.5">
-          <span>📋</span> 今日輪值人員座號
+          <span>📋</span> 今日輪值人員座號選取
         </h2>
         <button onclick="toggleDutyModal(false)" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-lg font-black border border-slate-700 transition active:scale-95">✕</button>
       </div>
 
-      <div class="my-4">
-        <label class="block text-xs md:text-sm font-bold text-emerald-400 mb-2">請輸入今日輪值人員座號或姓名：</label>
-        <textarea id="dutyInput" rows="3" class="w-full bg-slate-950 border-2 border-slate-700 focus:border-emerald-500 rounded-2xl p-3 text-white text-base md:text-xl font-bold font-digital outline-none resize-none transition shadow-inner placeholder-slate-600" placeholder="例如：01 號、02 號、03 號、04 號"></textarea>
-        <p class="text-xs text-slate-400 mt-2">💡 提示：輸入後將以超大字體即時呈現在右側輪值看板上，方便全班辨識。</p>
+      <div class="my-3">
+        <div class="flex justify-between items-center mb-2">
+          <label class="block text-xs md:text-sm font-bold text-emerald-400">點擊座號進行選取／取消：</label>
+          <div class="flex gap-2">
+            <button onclick="clearDutySelection()" class="px-2.5 py-1 bg-slate-800 hover:bg-rose-950 text-rose-300 text-xs font-bold rounded-lg border border-rose-500/40 transition active:scale-95">
+              清空
+            </button>
+          </div>
+        </div>
+
+        <!-- 1~30 號選盤網格 -->
+        <div id="seatPickerGrid" class="grid grid-cols-6 sm:grid-cols-6 md:grid-cols-10 gap-2 p-3 bg-slate-950 rounded-2xl border-2 border-slate-800 max-h-[300px] overflow-y-auto no-scrollbar">
+          <!-- JS 動態生成 1~30 按鈕 -->
+        </div>
+
+        <div class="mt-3 p-2.5 bg-slate-800/80 rounded-xl border border-slate-700 flex items-center justify-between">
+          <span class="text-xs text-slate-400 font-bold">目前已選座號：</span>
+          <span id="previewSelectedSeats" class="text-sm md:text-base font-digital font-black text-emerald-400">01、02、03、04</span>
+        </div>
       </div>
 
       <div class="pt-3 flex justify-end items-center border-t-2 border-slate-800 gap-3">
@@ -366,8 +381,9 @@
     let audioCtx = null;
     let simulatedTime = null; // 儲存測試時段 (如 "12:27")
 
-    // 今日輪值人員（單一字串欄位）
-    let dutyMemberSeats = "01 號、02 號、03 號、04 號";
+    // 今日輪值人員座號清單（預設數字 1 至 4，純數字不帶「號」）
+    let selectedDutySeats = [1, 2, 3, 4];
+    let tempDutySeats = [1, 2, 3, 4]; // 編輯彈窗暫存選取
 
     // 週一、週四、週五常規通用排程
     const DEFAULT_GENERAL_SCHEDULE = [
@@ -537,13 +553,13 @@
     }
 
     /* =================================================================
-       Web Audio API 柔和純淨提示音
+       音效系統 (Web Audio API 純代碼合成)
        ================================================================= */
     function initAudioContext() {
       if (!audioCtx) {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (AudioContext) {
-          audioCtx = new AudioContext();
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
         }
       }
       if (audioCtx && audioCtx.state === 'suspended') {
@@ -551,29 +567,36 @@
       }
     }
 
-    function playChime(isAlert = true) {
+    function playChime(type = 'normal') {
       if (!soundEnabled) return;
       initAudioContext();
       if (!audioCtx) return;
 
       try {
         const now = audioCtx.currentTime;
-        const notes = isAlert ? [523.25, 659.25, 783.99, 1046.50] : [440, 554.37, 659.25];
+        const notes = type === 'alert' 
+          ? [523.25, 659.25, 783.99, 1046.50] // C5, E5, G5, C6
+          : [440.00, 554.37, 659.25];         // A4, C#5, E5
+        
         notes.forEach((freq, idx) => {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
+          
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+          
           gain.gain.setValueAtTime(0.001, now + idx * 0.12);
-          gain.gain.exponentialRampToValueAtTime(0.18, now + idx * 0.12 + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.2, now + idx * 0.12 + 0.04);
           gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 0.9);
+          
           osc.connect(gain);
           gain.connect(audioCtx.destination);
+          
           osc.start(now + idx * 0.12);
           osc.stop(now + idx * 0.12 + 1.0);
         });
-      } catch (e) {
-        console.warn("音訊播放被瀏覽器限制", e);
+      } catch (err) {
+        console.warn("音訊播放受阻:", err);
       }
     }
 
@@ -584,68 +607,64 @@
       const btn = document.getElementById('soundBtn');
       if (soundEnabled) {
         icon.textContent = "🔔";
-        btn.classList.replace('text-slate-500', 'text-slate-200');
-        playChime(false);
+        btn.classList.remove('opacity-50');
+        playChime('normal');
       } else {
         icon.textContent = "🔕";
-        btn.classList.replace('text-slate-200', 'text-slate-500');
+        btn.classList.add('opacity-50');
       }
     }
 
     /* =================================================================
-       全螢幕與視窗互動
+       全螢幕與視窗互動控制
        ================================================================= */
     function toggleFullScreen() {
       initAudioContext();
-      const fsIcon = document.getElementById('fsIcon');
-      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-        const docElm = document.documentElement;
-        if (docElm.requestFullscreen) {
-          docElm.requestFullscreen();
-        } else if (docElm.webkitRequestFullscreen) {
-          docElm.webkitRequestFullscreen();
+      if (!document.fullscreenElement) {
+        const docEl = document.documentElement;
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen().catch(() => {});
+        } else if (docEl.webkitRequestFullscreen) {
+          docEl.webkitRequestFullscreen();
         }
-        if (fsIcon) fsIcon.textContent = "🗗";
       } else {
         if (document.exitFullscreen) {
           document.exitFullscreen();
         } else if (document.webkitExitFullscreen) {
           document.webkitExitFullscreen();
         }
-        if (fsIcon) fsIcon.textContent = "⛶";
       }
     }
 
     document.addEventListener('fullscreenchange', () => {
       const fsIcon = document.getElementById('fsIcon');
       if (fsIcon) {
-        fsIcon.textContent = document.fullscreenElement ? "🗗" : "⛶";
+        fsIcon.textContent = document.fullscreenElement ? '🗗' : '⛶';
       }
     });
 
-    function handleBackdropClick(e, modalId) {
-      if (e.target.id === modalId) {
+    function handleBackdropClick(event, modalId) {
+      if (event.target && event.target.id === modalId) {
         if (modalId === 'dutyModal') toggleDutyModal(false);
-        if (modalId === 'scheduleModal') toggleScheduleModal(false);
         if (modalId === 'testModal') toggleTestModal(false);
+        if (modalId === 'scheduleModal') toggleScheduleModal(false);
       }
     }
 
     /* =================================================================
-       星期切換邏輯
+       星期切換功能
        ================================================================= */
     function switchWeekday(day) {
       initAudioContext();
       currentWeekday = day;
-      lastAlertKey = null;
 
-      for (let d = 1; d <= 5; d++) {
-        const btn = document.getElementById(`btnDay-${d}`);
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`btnDay-${i}`);
         if (!btn) continue;
-        if (d === day) {
+        if (i === day) {
           btn.className = "weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2 bg-emerald-600 text-white border-emerald-400 shadow-lg shadow-emerald-950/60 scale-105";
         } else {
-          btn.className = "weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2 bg-slate-900/90 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white";
+          btn.className = "weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2 bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white";
         }
       }
 
@@ -653,191 +672,67 @@
     }
 
     /* =================================================================
-       核心節奏計算與畫面渲染
+       今日輪值人員座號選取與渲染 (純數字無「號」字)
        ================================================================= */
-    function updateRhythm() {
-      let currentHour, currentMinute, timeKey;
-
-      if (simulatedTime) {
-        const parts = simulatedTime.split(':').map(Number);
-        currentHour = parts[0];
-        currentMinute = parts[1];
-        timeKey = simulatedTime;
-      } else {
-        const now = new Date();
-        currentHour = now.getHours();
-        currentMinute = now.getMinutes();
-        const formattedHour = String(currentHour).padStart(2, '0');
-        const formattedMinute = String(currentMinute).padStart(2, '0');
-        timeKey = `${formattedHour}:${formattedMinute}`;
-      }
-
-      const currentTotalMinutes = currentHour * 60 + currentMinute;
-
-      const clockEl = document.getElementById('clockDisplay');
-      if (clockEl) clockEl.textContent = timeKey;
-
-      const schedule = weeklySchedules[currentWeekday] || weeklySchedules[1];
-      let currentPhase = null;
-      let currentIndex = -1;
-
-      for (let i = 0; i < schedule.length; i++) {
-        const pStart = timeToMinutes(schedule[i].start);
-        const pEnd = timeToMinutes(schedule[i].end);
-        if (currentTotalMinutes >= pStart && currentTotalMinutes < pEnd) {
-          currentPhase = schedule[i];
-          currentIndex = i;
-          break;
-        }
-      }
-
-      const phaseTag = document.getElementById('phaseTag');
-      const phaseIcon = document.getElementById('phaseIcon');
-      const phaseTitle = document.getElementById('phaseTitle');
-      const phaseSubtext = document.getElementById('phaseSubtext');
-      const countdownText = document.getElementById('countdownText');
-      const nextPhaseName = document.getElementById('nextPhaseName');
-      const progressBar = document.getElementById('progressBar');
-      const ambientGlow = document.getElementById('ambientGlow');
-
-      if (!currentPhase) {
-        const firstStart = schedule.length > 0 ? timeToMinutes(schedule[0].start) : 12 * 60;
-        const lastEnd = schedule.length > 0 ? timeToMinutes(schedule[schedule.length - 1].end) : 13 * 60 + 20;
-
-        if (currentTotalMinutes < firstStart) {
-          const diff = firstStart - currentTotalMinutes;
-          phaseTag.className = "px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl font-black uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 bg-slate-800 text-slate-300 border-2 border-slate-600";
-          phaseIcon.textContent = "⏰";
-          phaseTitle.textContent = "準備午餐時間";
-          phaseSubtext.textContent = `距離午餐開始還有 ${diff} 分鐘`;
-          countdownText.textContent = `${diff} 分鐘`;
-          nextPhaseName.textContent = schedule.length > 0 ? schedule[0].title : "--";
-          progressBar.style.width = "0%";
-          ambientGlow.style.backgroundColor = "rgba(16, 185, 129, 0.05)";
-        } else {
-          phaseTag.className = "px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl font-black uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 bg-slate-800 text-slate-400 border-2 border-slate-700";
-          phaseIcon.textContent = "✨";
-          phaseTitle.textContent = "午休結束";
-          phaseSubtext.textContent = currentWeekday === 3 ? "放學回家、注意交通安全" : "午休結束、精神飽滿迎接下午課程";
-          countdownText.textContent = "已結束";
-          nextPhaseName.textContent = "下午課堂";
-          progressBar.style.width = "100%";
-          ambientGlow.style.backgroundColor = "rgba(99, 102, 241, 0.08)";
-        }
-
-        checkSpecialAlerts(timeKey);
-        return;
-      }
-
-      phaseTag.className = `px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl lg:text-3xl font-black uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 border-2 md:border-4 ${currentPhase.colorClass || 'bg-emerald-600 text-white border-emerald-400'}`;
-      phaseIcon.textContent = currentPhase.icon || "⏳";
-      phaseTitle.textContent = currentPhase.title;
-      phaseSubtext.textContent = currentPhase.subtext;
-
-      const pStart = timeToMinutes(currentPhase.start);
-      const pEnd = timeToMinutes(currentPhase.end);
-      const minutesLeft = pEnd - currentTotalMinutes;
-      const totalDuration = pEnd - pStart;
-      const elapsed = currentTotalMinutes - pStart;
-      const percent = totalDuration > 0 ? Math.min(100, Math.max(0, (elapsed / totalDuration) * 100)) : 100;
-
-      countdownText.textContent = `${minutesLeft} 分鐘`;
-      progressBar.style.width = `${percent}%`;
-      progressBar.className = `h-full bg-gradient-to-r ${currentPhase.barColor || 'from-emerald-500 to-teal-400'} rounded-full transition-all duration-500 ease-out`;
-      ambientGlow.style.backgroundColor = currentPhase.glowColor || 'rgba(16, 185, 129, 0.2)';
-
-      if (currentIndex < schedule.length - 1) {
-        nextPhaseName.textContent = schedule[currentIndex + 1].title;
-      } else {
-        nextPhaseName.textContent = currentWeekday === 3 ? "放學時間" : "下午課程";
-      }
-
-      checkSpecialAlerts(timeKey);
+    function formatSeatNumbers(seatsArr) {
+      if (!seatsArr || seatsArr.length === 0) return "無";
+      const sorted = [...seatsArr].sort((a, b) => a - b);
+      return sorted.map(num => String(num).padStart(2, '0')).join('、');
     }
 
-    /* =================================================================
-       特殊節點提醒廣播（12:27、12:37、12:47）
-       ================================================================= */
-    function checkSpecialAlerts(timeKey) {
-      if (lastAlertKey === timeKey) return;
-
-      let alertData = null;
-
-      if (timeKey === "12:27") {
-        if (currentWeekday === 2) {
-          alertData = {
-            title: "🪥 12:27 潔牙與含氟漱口水提醒",
-            detail: "用餐時間即將結束，請準備收拾個人餐具，並配合使用含氟漱口水與潔牙！",
-            bg: "bg-teal-950/95 text-teal-100 border-teal-400"
-          };
-        } else {
-          alertData = {
-            title: "🪥 12:27 準備收拾與潔牙提醒",
-            detail: "用餐時間即將結束，請準備收拾個人餐具與潔牙！",
-            bg: "bg-amber-950/95 text-amber-100 border-amber-400"
-          };
-        }
-      } else if (timeKey === "12:37") {
-        if (currentWeekday === 3) {
-          alertData = {
-            title: "🎒 12:37 放學預備提醒",
-            detail: "整理工作即將截止！12:40 即將放學，請完成手邊工作並收拾書包準備放學。",
-            bg: "bg-amber-950/95 text-amber-100 border-amber-400"
-          };
-        } else {
-          alertData = {
-            title: "⏰ 12:37 午休預備提醒",
-            detail: "環境整理即將截止！請加快動作，完成如廁洗手，準備午休！",
-            bg: "bg-indigo-950/95 text-indigo-100 border-indigo-400"
-          };
-        }
-      } else if (timeKey === "12:47") {
-        if (currentWeekday !== 3) {
-          alertData = {
-            title: "💤 12:47 桌面清空，熄燈休息提醒",
-            detail: "請將桌面完全清空，值日生準備拉上窗簾並熄燈，全班安靜休息！",
-            bg: "bg-purple-950/95 text-purple-100 border-purple-400"
-          };
-        }
-      }
-
-      if (alertData) {
-        showBroadcast(alertData.title, alertData.detail, alertData.bg);
-        playChime(true);
-        lastAlertKey = timeKey;
-      }
-    }
-
-    function showBroadcast(title, detail, bgClass) {
-      const card = document.getElementById('broadcastCard');
-      const inner = document.getElementById('broadcastInner');
-      document.getElementById('broadcastTitle').textContent = title;
-      document.getElementById('broadcastDetail').textContent = detail;
-      inner.className = `rounded-3xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between border-2 shadow-2xl gap-3 ${bgClass}`;
-      card.classList.remove('hidden');
-    }
-
-    function dismissBroadcast() {
-      const card = document.getElementById('broadcastCard');
-      if (card) card.classList.add('hidden');
-    }
-
-    /* =================================================================
-       今日輪值人員座號設定與渲染
-       ================================================================= */
     function renderDutyBoard() {
       const display = document.getElementById('mainDutyDisplay');
       if (display) {
-        display.textContent = dutyMemberSeats.trim() || '未指定座號';
+        display.textContent = formatSeatNumbers(selectedDutySeats);
       }
+    }
+
+    function renderSeatGrid() {
+      const grid = document.getElementById('seatPickerGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      for (let i = 1; i <= 30; i++) {
+        const isSelected = tempDutySeats.includes(i);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => toggleSeatSelection(i);
+        btn.className = isSelected
+          ? "h-11 md:h-12 flex items-center justify-center rounded-xl font-digital text-base md:text-lg font-black transition active:scale-95 border-2 bg-emerald-600 text-white border-emerald-400 shadow-md shadow-emerald-950/60"
+          : "h-11 md:h-12 flex items-center justify-center rounded-xl font-digital text-base md:text-lg font-bold transition active:scale-95 border-2 bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white";
+        btn.textContent = String(i).padStart(2, '0');
+        grid.appendChild(btn);
+      }
+
+      const preview = document.getElementById('previewSelectedSeats');
+      if (preview) {
+        preview.textContent = formatSeatNumbers(tempDutySeats);
+      }
+    }
+
+    function toggleSeatSelection(seatNum) {
+      initAudioContext();
+      const idx = tempDutySeats.indexOf(seatNum);
+      if (idx > -1) {
+        tempDutySeats.splice(idx, 1);
+      } else {
+        tempDutySeats.push(seatNum);
+      }
+      renderSeatGrid();
+    }
+
+    function clearDutySelection() {
+      initAudioContext();
+      tempDutySeats = [];
+      renderSeatGrid();
     }
 
     function toggleDutyModal(show) {
       initAudioContext();
       const modal = document.getElementById('dutyModal');
-      const input = document.getElementById('dutyInput');
       if (show) {
-        if (input) input.value = dutyMemberSeats;
+        tempDutySeats = [...selectedDutySeats];
+        renderSeatGrid();
         modal.classList.remove('hidden');
       } else {
         modal.classList.add('hidden');
@@ -845,12 +740,10 @@
     }
 
     function saveDutyList() {
-      const input = document.getElementById('dutyInput');
-      if (input) {
-        dutyMemberSeats = input.value.trim() || "未指定座號";
-      }
+      selectedDutySeats = [...tempDutySeats];
       toggleDutyModal(false);
       renderDutyBoard();
+      playChime('normal');
     }
 
     /* =================================================================
@@ -1009,6 +902,179 @@
       toggleScheduleModal(false);
       lastAlertKey = null;
       updateRhythm();
+      playChime('normal');
+    }
+
+    /* =================================================================
+       核心節奏計算與警示派發引擎 (updateRhythm)
+       ================================================================= */
+    function dismissBroadcast() {
+      const card = document.getElementById('broadcastCard');
+      if (card) {
+        card.classList.add('hidden');
+      }
+    }
+
+    function updateRhythm() {
+      let currentHour, currentMinute, currentTotalMinutes;
+
+      if (simulatedTime) {
+        const parts = simulatedTime.split(':').map(Number);
+        currentHour = parts[0];
+        currentMinute = parts[1] || 0;
+        currentTotalMinutes = currentHour * 60 + currentMinute;
+      } else {
+        const now = new Date();
+        currentHour = now.getHours();
+        currentMinute = now.getMinutes();
+        currentTotalMinutes = currentHour * 60 + currentMinute;
+      }
+
+      const formattedHour = String(currentHour).padStart(2, '0');
+      const formattedMinute = String(currentMinute).padStart(2, '0');
+      const timeStr = `${formattedHour}:${formattedMinute}`;
+
+      // 更新超大時間看板
+      const clockEl = document.getElementById('clockDisplay');
+      if (clockEl) {
+        clockEl.textContent = timeStr;
+      }
+
+      const schedule = weeklySchedules[currentWeekday] || DEFAULT_GENERAL_SCHEDULE;
+      let activePhase = null;
+      let activeIndex = -1;
+
+      for (let i = 0; i < schedule.length; i++) {
+        const startMin = timeToMinutes(schedule[i].start);
+        const endMin = timeToMinutes(schedule[i].end);
+        if (currentTotalMinutes >= startMin && currentTotalMinutes < endMin) {
+          activePhase = schedule[i];
+          activeIndex = i;
+          break;
+        }
+      }
+
+      const phaseTag = document.getElementById('phaseTag');
+      const phaseIcon = document.getElementById('phaseIcon');
+      const phaseTitle = document.getElementById('phaseTitle');
+      const phaseSubtext = document.getElementById('phaseSubtext');
+      const countdownText = document.getElementById('countdownText');
+      const nextPhaseName = document.getElementById('nextPhaseName');
+      const progressBar = document.getElementById('progressBar');
+      const ambientGlow = document.getElementById('ambientGlow');
+
+      if (activePhase) {
+        const startMin = timeToMinutes(activePhase.start);
+        const endMin = timeToMinutes(activePhase.end);
+        const minutesLeft = Math.max(0, endMin - currentTotalMinutes);
+        const totalDuration = Math.max(1, endMin - startMin);
+        const elapsed = currentTotalMinutes - startMin;
+        const progressPct = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
+
+        if (phaseTag) {
+          phaseTag.className = `px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl lg:text-3xl font-black tracking-wider uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 border-2 md:border-4 ${activePhase.colorClass}`;
+        }
+        if (phaseIcon) phaseIcon.textContent = activePhase.icon;
+        if (phaseTitle) phaseTitle.textContent = activePhase.title;
+        if (phaseSubtext) phaseSubtext.textContent = activePhase.subtext;
+
+        if (countdownText) countdownText.textContent = `${minutesLeft} 分鐘`;
+        if (progressBar) {
+          progressBar.style.width = `${progressPct}%`;
+          progressBar.className = `h-full bg-gradient-to-r ${activePhase.barColor} rounded-full transition-all duration-500 ease-out`;
+        }
+
+        if (nextPhaseName) {
+          if (activeIndex < schedule.length - 1) {
+            nextPhaseName.textContent = schedule[activeIndex + 1].title;
+          } else {
+            nextPhaseName.textContent = currentWeekday === 3 ? "放學回家" : "下午課程";
+          }
+        }
+
+        if (ambientGlow) {
+          ambientGlow.style.backgroundColor = activePhase.glowColor || 'rgba(16, 185, 129, 0.2)';
+        }
+      } else {
+        // 非排程時段
+        if (currentTotalMinutes < timeToMinutes(schedule[0].start)) {
+          const diff = timeToMinutes(schedule[0].start) - currentTotalMinutes;
+          if (phaseTag) {
+            phaseTag.className = "px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl lg:text-3xl font-black tracking-wider uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 bg-slate-800 text-slate-300 border-2 border-slate-700";
+          }
+          if (phaseIcon) phaseIcon.textContent = "⏱️";
+          if (phaseTitle) phaseTitle.textContent = "即將開始午餐";
+          if (phaseSubtext) phaseSubtext.textContent = `距離午間行程開始還有約 ${diff} 分鐘`;
+          if (countdownText) countdownText.textContent = `${diff} 分鐘`;
+          if (nextPhaseName) nextPhaseName.textContent = schedule[0].title;
+          if (progressBar) progressBar.style.width = "0%";
+        } else {
+          if (phaseTag) {
+            phaseTag.className = "px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl lg:text-3xl font-black tracking-wider uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 bg-slate-800 text-slate-400 border-2 border-slate-700";
+          }
+          if (phaseIcon) phaseIcon.textContent = "✨";
+          if (phaseTitle) phaseTitle.textContent = "午休結束";
+          if (phaseSubtext) phaseSubtext.textContent = "午間節奏引導已圓滿結束，請精神飽滿迎接下午課程";
+          if (countdownText) countdownText.textContent = "0 分鐘";
+          if (nextPhaseName) nextPhaseName.textContent = "課程學習";
+          if (progressBar) progressBar.style.width = "100%";
+        }
+      }
+
+      // 檢查 12:27、12:37、12:47 關鍵節點廣播
+      handleKeypointBroadcast(timeStr);
+    }
+
+    function handleKeypointBroadcast(timeStr) {
+      if (timeStr === lastAlertKey) return;
+
+      const card = document.getElementById('broadcastCard');
+      const icon = document.getElementById('broadcastIcon');
+      const title = document.getElementById('broadcastTitle');
+      const detail = document.getElementById('broadcastDetail');
+      const inner = document.getElementById('broadcastInner');
+
+      if (timeStr === "12:27") {
+        lastAlertKey = timeStr;
+        if (icon) icon.textContent = "🪥";
+        if (title) title.textContent = "12:27 準備收拾與潔牙提醒";
+        if (detail) {
+          detail.textContent = currentWeekday === 2
+            ? "用餐時間即將結束，請準備收拾餐具，使用含氟漱口水並徹底潔牙！"
+            : "用餐時間即將結束，請準備收拾餐具並攜帶牙刷前往潔牙漱口！";
+        }
+        if (inner) {
+          inner.className = "rounded-3xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between border-2 shadow-2xl gap-3 bg-amber-950/95 text-amber-100 border-amber-400";
+        }
+        if (card) card.classList.remove('hidden');
+        playChime('alert');
+      } else if (timeStr === "12:37") {
+        lastAlertKey = timeStr;
+        if (icon) icon.textContent = "⏰";
+        if (title) title.textContent = currentWeekday === 3 ? "12:37 放學預備提醒" : "12:37 午休預備提醒";
+        if (detail) {
+          detail.textContent = currentWeekday === 3
+            ? "12:40 即將放學，請加快動作整理環境、檢查書包並將垃圾歸位！"
+            : "即將進入 12:40 預備午休，請加快動作整理環境、洗手如廁並訂正作業！";
+        }
+        if (inner) {
+          inner.className = "rounded-3xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between border-2 shadow-2xl gap-3 bg-indigo-950/95 text-indigo-100 border-indigo-400";
+        }
+        if (card) card.classList.remove('hidden');
+        playChime('alert');
+      } else if (timeStr === "12:47") {
+        lastAlertKey = timeStr;
+        if (icon) icon.textContent = "💤";
+        if (title) title.textContent = "12:47 桌面淨空，準備熄燈";
+        if (detail) {
+          detail.textContent = "即將進入 12:50 熄燈休息時間，請將桌面完全淨空，輪值生準備拉窗簾與熄燈！";
+        }
+        if (inner) {
+          inner.className = "rounded-3xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between border-2 shadow-2xl gap-3 bg-purple-950/95 text-purple-100 border-purple-400";
+        }
+        if (card) card.classList.remove('hidden');
+        playChime('alert');
+      }
     }
 
     /* =================================================================

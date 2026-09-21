@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>午間節奏引導 v2.3.2</title>
+  <title>午間節奏引導 v2.3.3</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -51,36 +51,35 @@
 </head>
 <body class="bg-slate-900 text-slate-100 flex flex-col justify-between w-full h-screen overflow-hidden transition-colors duration-700 select-none">
 
-  <!-- 頂部功能工具列 (純圖示超大按鍵) -->
-  <header class="flex-shrink-0 w-full px-4 md:px-8 py-2.5 md:py-3 flex justify-between items-center border-b border-slate-800/90 bg-slate-950/80 backdrop-blur-md z-20">
-    <div class="flex items-center gap-2.5">
+  <!-- 頂部功能工具列 (整合標題、星期切換與大圖示控制列) -->
+  <header class="flex-shrink-0 w-full px-4 md:px-8 py-2 md:py-2.5 flex flex-wrap justify-between items-center border-b border-slate-800/90 bg-slate-950/80 backdrop-blur-md z-20 gap-2">
+    <div class="flex items-center gap-2 md:gap-3 flex-wrap">
       <div class="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50"></div>
-      <h1 class="text-lg md:text-2xl font-black tracking-wider text-slate-100 flex items-center gap-2">
+      <h1 class="text-base md:text-xl font-black tracking-wider text-slate-100 flex items-center gap-2">
         午間節奏引導
-        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-mono border border-emerald-500/30">v2.3.2</span>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-mono border border-emerald-500/30">v2.3.3</span>
         <span id="simBadge" class="hidden text-xs px-2.5 py-0.5 rounded-full bg-amber-900/80 text-amber-300 font-bold border border-amber-500/50 animate-pulse">測試中</span>
       </h1>
+
+      <!-- 星期切換狀態器（已調整至版本序號右側） -->
+      <div class="flex items-center gap-1.5 md:gap-2 ml-1 md:ml-2 flex-wrap">
+        <button onclick="switchWeekday(1)" id="btnDay-1" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週一</button>
+        <button onclick="switchWeekday(2)" id="btnDay-2" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週二 (含氟漱口水)</button>
+        <button onclick="switchWeekday(3)" id="btnDay-3" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週三 (12:40放學)</button>
+        <button onclick="switchWeekday(4)" id="btnDay-4" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週四</button>
+        <button onclick="switchWeekday(5)" id="btnDay-5" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週五</button>
+      </div>
     </div>
 
-    <!-- 超大純圖示觸控按鈕群組（附懸停 Tooltip） -->
+    <!-- 超大純圖示觸控按鈕群組（已取消輪值編輯功能鍵） -->
     <div class="flex items-center gap-2 md:gap-3">
-      <!-- 全螢幕按鈕 (已與測試模式按鈕位置互換) -->
+      <!-- 全螢幕按鈕 -->
       <div class="relative group">
         <button onclick="toggleFullScreen()" id="fsBtn" aria-label="全螢幕切換" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xl md:text-2xl shadow-xl shadow-emerald-950/60 transition active:scale-95 border-2 border-emerald-400">
           <span id="fsIcon">⛶</span>
         </button>
         <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-emerald-300 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
           全螢幕切換
-        </div>
-      </div>
-
-      <!-- 輪值名單按鈕 -->
-      <div class="relative group">
-        <button onclick="toggleDutyModal(true)" aria-label="今日輪值人員" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-100 border-2 border-slate-600 text-xl md:text-2xl shadow-xl transition active:scale-95">
-          📋
-        </button>
-        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-slate-100 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
-          今日輪值人員座號
         </div>
       </div>
 
@@ -104,7 +103,7 @@
         </div>
       </div>
 
-      <!-- 測試模擬按鈕 (已與全螢幕按鈕位置互換) -->
+      <!-- 測試模擬按鈕 -->
       <div class="relative group">
         <button onclick="toggleTestModal(true)" aria-label="時間效果試閱" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-amber-950/70 hover:bg-amber-800/80 text-amber-200 border-2 border-amber-500/50 text-xl md:text-2xl shadow-xl transition active:scale-95">
           ⏱️
@@ -115,17 +114,6 @@
       </div>
     </div>
   </header>
-
-  <!-- 週一至週五切換橫條 (緊密靠左排列) -->
-  <div class="flex-shrink-0 w-full bg-slate-950/90 border-b border-slate-800 px-4 md:px-8 py-2 flex items-center justify-start flex-wrap gap-2 z-10">
-    <div class="flex items-center gap-2 flex-wrap">
-      <button onclick="switchWeekday(1)" id="btnDay-1" class="weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2">週一</button>
-      <button onclick="switchWeekday(2)" id="btnDay-2" class="weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2">週二 (含氟漱口水)</button>
-      <button onclick="switchWeekday(3)" id="btnDay-3" class="weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2">週三 (12:40放學)</button>
-      <button onclick="switchWeekday(4)" id="btnDay-4" class="weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2">週四</button>
-      <button onclick="switchWeekday(5)" id="btnDay-5" class="weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2">週五</button>
-    </div>
-  </div>
 
   <!-- 主畫面儀表板 (鎖定視窗免滾動) -->
   <main class="flex-1 min-h-0 flex flex-col justify-around items-center px-4 md:px-8 py-2 md:py-3 relative">
@@ -662,9 +650,9 @@
         const btn = document.getElementById(`btnDay-${i}`);
         if (!btn) continue;
         if (i === day) {
-          btn.className = "weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2 bg-emerald-600 text-white border-emerald-400 shadow-lg shadow-emerald-950/60 scale-105";
+          btn.className = "weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2 bg-emerald-600 text-white border-emerald-400 shadow-lg shadow-emerald-950/60 scale-105";
         } else {
-          btn.className = "weekday-btn px-4 md:px-5 py-1.5 md:py-2 rounded-xl font-black text-sm md:text-base transition-all border-2 bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white";
+          btn.className = "weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2 bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white";
         }
       }
 

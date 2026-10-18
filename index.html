@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>午間節奏引導 v2.3.6</title>
+  <title>午間節奏引導 v2.3.7</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -57,7 +57,7 @@
       <div class="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50"></div>
       <h1 class="text-base md:text-xl font-black tracking-wider text-slate-100 flex items-center gap-2">
         午間節奏引導
-        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-mono border border-emerald-500/30">v2.3.6</span>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-mono border border-emerald-500/30">v2.3.7</span>
         <span id="simBadge" class="hidden text-xs px-2.5 py-0.5 rounded-full bg-amber-900/80 text-amber-300 font-bold border border-amber-500/50 animate-pulse">測試中</span>
       </h1>
 
@@ -277,25 +277,25 @@
           <div class="text-blue-400 font-digital font-bold text-base md:text-lg">12:15</div>
           <div class="text-xs font-bold text-slate-200 mt-0.5">🍱 安靜用餐時間</div>
         </button>
-        <button onclick="simulateTime('12:27')" class="p-2.5 bg-amber-950/70 hover:bg-amber-900 border-2 border-amber-500/60 rounded-2xl text-left transition active:scale-95 shadow-md shadow-amber-950/50">
-          <div class="text-amber-300 font-digital font-bold text-base md:text-lg">12:27 ⚠️</div>
-          <div class="text-xs font-bold text-amber-200 mt-0.5">🪥 潔牙廣播提醒</div>
+        <button id="testAlertBtn-0" onclick="simulateTime('12:27')" class="p-2.5 bg-amber-950/70 hover:bg-amber-900 border-2 border-amber-500/60 rounded-2xl text-left transition active:scale-95 shadow-md shadow-amber-950/50">
+          <div id="testAlertTime-0" class="text-amber-300 font-digital font-bold text-base md:text-lg">12:27 ⚠️</div>
+          <div id="testAlertTitle-0" class="text-xs font-bold text-amber-200 mt-0.5">🪥 潔牙廣播提醒</div>
         </button>
         <button onclick="simulateTime('12:30')" class="p-2.5 bg-slate-800 hover:bg-teal-950 border border-slate-700 hover:border-teal-500 rounded-2xl text-left transition active:scale-95">
           <div class="text-teal-400 font-digital font-bold text-base md:text-lg">12:30</div>
           <div class="text-xs font-bold text-slate-200 mt-0.5">🧹 環境整理與潔牙</div>
         </button>
-        <button onclick="simulateTime('12:37')" class="p-2.5 bg-indigo-950/70 hover:bg-indigo-900 border-2 border-indigo-500/60 rounded-2xl text-left transition active:scale-95 shadow-md shadow-indigo-950/50">
-          <div class="text-indigo-300 font-digital font-bold text-base md:text-lg">12:37 ⚠️</div>
-          <div class="text-xs font-bold text-indigo-200 mt-0.5">⏰ 午休預備廣播</div>
+        <button id="testAlertBtn-1" onclick="simulateTime('12:37')" class="p-2.5 bg-indigo-950/70 hover:bg-indigo-900 border-2 border-indigo-500/60 rounded-2xl text-left transition active:scale-95 shadow-md shadow-indigo-950/50">
+          <div id="testAlertTime-1" class="text-indigo-300 font-digital font-bold text-base md:text-lg">12:37 ⚠️</div>
+          <div id="testAlertTitle-1" class="text-xs font-bold text-indigo-200 mt-0.5">⏰ 午休預備廣播</div>
         </button>
         <button onclick="simulateTime('12:40')" class="p-2.5 bg-slate-800 hover:bg-indigo-950 border border-slate-700 hover:border-indigo-500 rounded-2xl text-left transition active:scale-95">
           <div class="text-indigo-400 font-digital font-bold text-base md:text-lg">12:40</div>
           <div class="text-xs font-bold text-slate-200 mt-0.5">🚰 預備午休 (週三放學)</div>
         </button>
-        <button onclick="simulateTime('12:47')" class="p-2.5 bg-purple-950/70 hover:bg-purple-900 border-2 border-purple-500/60 rounded-2xl text-left transition active:scale-95 shadow-md shadow-purple-950/50">
-          <div class="text-purple-300 font-digital font-bold text-base md:text-lg">12:47 ⚠️</div>
-          <div class="text-xs font-bold text-purple-200 mt-0.5">💤 熄燈提醒廣播</div>
+        <button id="testAlertBtn-2" onclick="simulateTime('12:47')" class="p-2.5 bg-purple-950/70 hover:bg-purple-900 border-2 border-purple-500/60 rounded-2xl text-left transition active:scale-95 shadow-md shadow-purple-950/50">
+          <div id="testAlertTime-2" class="text-purple-300 font-digital font-bold text-base md:text-lg">12:47 ⚠️</div>
+          <div id="testAlertTitle-2" class="text-xs font-bold text-purple-200 mt-0.5">💤 熄燈提醒廣播</div>
         </button>
         <button onclick="simulateTime('12:50')" class="p-2.5 bg-slate-800 hover:bg-purple-950 border border-slate-700 hover:border-purple-500 rounded-2xl text-left transition active:scale-95">
           <div class="text-purple-400 font-digital font-bold text-base md:text-lg">12:50</div>
@@ -327,15 +327,36 @@
             <span>⚙️</span> 行程時間與內容編修
           </h2>
           <p class="text-slate-400 text-xs mt-0.5">
-            目前編輯：<span id="scheduleModalDayLabel" class="text-indigo-400 font-bold">週一</span> 之排程
+            目前編輯：<span id="scheduleModalDayLabel" class="text-indigo-400 font-bold">週一</span> 之排程與提示時間
           </p>
         </div>
         <button onclick="toggleScheduleModal(false)" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-lg font-black border border-slate-700 transition active:scale-95">✕</button>
       </div>
 
-      <!-- 動態行程階段清單 -->
-      <div class="my-3 overflow-y-auto space-y-3 no-scrollbar pr-1 flex-1" id="scheduleItemsContainer">
-        <!-- JS 動態渲染 -->
+      <!-- 動態行程階段與階段轉換提示清單 -->
+      <div class="my-3 overflow-y-auto space-y-5 no-scrollbar pr-1 flex-1">
+        <!-- 12:27, 12:37, 12:47 提示時間編修區 -->
+        <div class="bg-slate-950/70 p-3.5 md:p-4 rounded-2xl border border-amber-500/40">
+          <div class="flex items-center justify-between mb-2.5">
+            <h3 class="text-sm md:text-base font-black text-amber-300 flex items-center gap-2">
+              <span>⏰</span> 階段轉換提示時間與內容編修（預設 12:27、12:37、12:47）
+            </h3>
+            <span class="text-xs text-slate-400 font-bold">觸發後自動顯示 3 分鐘</span>
+          </div>
+          <div class="space-y-2.5" id="alertItemsContainer">
+            <!-- JS 動態渲染提示時間設定 -->
+          </div>
+        </div>
+
+        <!-- 各階段主行程編修區 -->
+        <div>
+          <h3 class="text-sm md:text-base font-black text-indigo-300 mb-2.5 flex items-center gap-2">
+            <span>📅</span> 各階段行程時間與內容設定
+          </h3>
+          <div class="space-y-3" id="scheduleItemsContainer">
+            <!-- JS 動態渲染 -->
+          </div>
+        </div>
       </div>
 
       <div class="pt-3 flex flex-wrap justify-between items-center border-t-2 border-slate-800 gap-2">
@@ -529,6 +550,44 @@
       3: JSON.parse(JSON.stringify(DEFAULT_WEDNESDAY_SCHEDULE)),
       4: JSON.parse(JSON.stringify(DEFAULT_GENERAL_SCHEDULE)),
       5: JSON.parse(JSON.stringify(DEFAULT_GENERAL_SCHEDULE))
+    };
+
+    function getDefaultAlertsForDay(day) {
+      return [
+        {
+          time: "12:27",
+          icon: "🪥",
+          title: "12:27 準備收拾與潔牙提醒",
+          detail: day === 2
+            ? "用餐時間即將結束，請準備收拾餐具，使用含氟漱口水並徹底潔牙！"
+            : "用餐時間即將結束，請準備收拾餐具並攜帶牙刷前往潔牙漱口！",
+          styleClass: "bg-amber-950/95 text-amber-100 border-amber-400"
+        },
+        {
+          time: "12:37",
+          icon: "⏰",
+          title: day === 3 ? "12:37 放學預備提醒" : "12:37 午休預備提醒",
+          detail: day === 3
+            ? "12:40 即將放學，請加快動作整理環境、檢查書包並將垃圾歸位！"
+            : "即將進入 12:40 預備午休，請加快動作整理環境、洗手如廁並訂正作業！",
+          styleClass: "bg-indigo-950/95 text-indigo-100 border-indigo-400"
+        },
+        {
+          time: "12:47",
+          icon: "💤",
+          title: "12:47 桌面淨空，準備熄燈",
+          detail: "即將進入 12:50 熄燈休息時間，請將桌面完全淨空，輪值生準備拉窗簾與熄燈！",
+          styleClass: "bg-purple-950/95 text-purple-100 border-purple-400"
+        }
+      ];
+    }
+
+    let weeklyAlerts = {
+      1: getDefaultAlertsForDay(1),
+      2: getDefaultAlertsForDay(2),
+      3: getDefaultAlertsForDay(3),
+      4: getDefaultAlertsForDay(4),
+      5: getDefaultAlertsForDay(5)
     };
 
     function timeToMinutes(tStr) {
@@ -755,6 +814,22 @@
       initAudioContext();
       const modal = document.getElementById('testModal');
       if (show) {
+        const currentAlerts = weeklyAlerts[currentWeekday] || [];
+        currentAlerts.forEach((alertObj, idx) => {
+          const btn = document.getElementById(`testAlertBtn-${idx}`);
+          const timeEl = document.getElementById(`testAlertTime-${idx}`);
+          const titleEl = document.getElementById(`testAlertTitle-${idx}`);
+          if (btn && alertObj.time) {
+            btn.setAttribute('onclick', `simulateTime('${alertObj.time}')`);
+          }
+          if (timeEl && alertObj.time) {
+            timeEl.textContent = `${alertObj.time} ⚠️`;
+          }
+          if (titleEl) {
+            const cleanTitle = (alertObj.title || '').replace(/^\d{1,2}:\d{2}\s*/, '');
+            titleEl.textContent = `${alertObj.icon || '⏰'} ${cleanTitle || '階段轉換提醒'}`;
+          }
+        });
         modal.classList.remove('hidden');
       } else {
         modal.classList.add('hidden');
@@ -802,10 +877,62 @@
       const modal = document.getElementById('scheduleModal');
       if (show) {
         document.getElementById('scheduleModalDayLabel').textContent = WEEKDAY_NAMES[currentWeekday] || "週一";
+        renderAlertInputs();
         renderScheduleInputs();
         modal.classList.remove('hidden');
       } else {
         modal.classList.add('hidden');
+      }
+    }
+
+    function renderAlertInputs() {
+      const container = document.getElementById('alertItemsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const currentAlerts = weeklyAlerts[currentWeekday] || [];
+
+      currentAlerts.forEach((alertItem, idx) => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-900/95 p-3 rounded-2xl border border-slate-700/90 flex flex-col gap-2";
+        card.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center">
+            <div class="sm:col-span-3">
+              <label class="block text-xs font-bold text-amber-300 mb-1">提示時間 ${idx + 1}</label>
+              <input type="time" value="${alertItem.time}" oninput="updateAlertField(${idx}, 'time', this.value)" class="w-full bg-slate-950 border border-amber-500/50 rounded-xl px-2.5 py-1.5 text-amber-200 font-mono text-sm font-bold focus:outline-none focus:border-amber-400">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-400 mb-1">圖示</label>
+              <input type="text" value="${alertItem.icon || '⏰'}" oninput="updateAlertField(${idx}, 'icon', this.value)" class="w-full text-center bg-slate-950 border border-slate-700 rounded-xl px-2 py-1.5 text-sm focus:outline-none focus:border-amber-400" title="提示圖示">
+            </div>
+            <div class="sm:col-span-7">
+              <label class="block text-xs font-bold text-slate-400 mb-1">提示標題</label>
+              <input type="text" id="alertTitleInput-${idx}" value="${alertItem.title}" oninput="updateAlertField(${idx}, 'title', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white text-sm font-bold focus:outline-none focus:border-amber-400" placeholder="提示標題">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-400 mb-1">彈出視窗提醒內容</label>
+            <input type="text" value="${alertItem.detail}" oninput="updateAlertField(${idx}, 'detail', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-200 text-xs font-medium focus:outline-none focus:border-amber-400" placeholder="提醒詳細說明">
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateAlertField(idx, field, value) {
+      if (!weeklyAlerts[currentWeekday] || !weeklyAlerts[currentWeekday][idx]) return;
+      const item = weeklyAlerts[currentWeekday][idx];
+
+      if (field === 'time') {
+        const oldTime = item.time;
+        item.time = value;
+        if (oldTime && item.title && item.title.startsWith(oldTime)) {
+          item.title = value + item.title.slice(oldTime.length);
+          const titleInput = document.getElementById(`alertTitleInput-${idx}`);
+          if (titleInput) titleInput.value = item.title;
+        }
+      } else {
+        item[field] = value;
       }
     }
 
@@ -898,6 +1025,8 @@
       } else {
         weeklySchedules[currentWeekday] = JSON.parse(JSON.stringify(DEFAULT_GENERAL_SCHEDULE));
       }
+      weeklyAlerts[currentWeekday] = getDefaultAlertsForDay(currentWeekday);
+      renderAlertInputs();
       renderScheduleInputs();
     }
 
@@ -1021,24 +1150,33 @@
           }
           if (phaseIcon) phaseIcon.textContent = "✨";
           if (phaseTitle) phaseTitle.textContent = "午休結束";
-          if (phaseSubtext) phaseSubtext.textContent = "午間節奏引導已圓滿結束，請精神飽滿迎接下午課程";
+          if (phaseSubtext) phaseSubtext.textContent = "午休時間結束，請迎接下午課程";
           if (countdownText) countdownText.textContent = "0 分鐘";
           if (nextPhaseName) nextPhaseName.textContent = "課程學習";
           if (progressBar) progressBar.style.width = "100%";
         }
       }
 
-      // 檢查 12:27、12:37、12:47 關鍵節點廣播
+      // 檢查關鍵節點廣播
       handleKeypointBroadcast(timeStr);
     }
 
     function handleKeypointBroadcast(timeStr) {
-      // 於 12:30, 12:40, 12:50 亦自動清除前階段提醒
-      if (timeStr === "12:30" || timeStr === "12:40" || timeStr === "12:50") {
+      const currentAlerts = weeklyAlerts[currentWeekday] || [];
+      const matchedAlert = currentAlerts.find(a => a.time === timeStr);
+
+      // 當進入各主要階段起點且非提示時間時，自動清除前階段提醒
+      const schedule = weeklySchedules[currentWeekday] || DEFAULT_GENERAL_SCHEDULE;
+      const isPhaseStart = schedule.some(p => p.start === timeStr);
+      if (isPhaseStart && !matchedAlert) {
         dismissBroadcast();
       }
 
-      if (timeStr === lastAlertKey) return;
+      if (!matchedAlert) return;
+
+      const alertKey = `${currentWeekday}-${timeStr}`;
+      if (alertKey === lastAlertKey) return;
+      lastAlertKey = alertKey;
 
       const card = document.getElementById('broadcastCard');
       const icon = document.getElementById('broadcastIcon');
@@ -1046,57 +1184,21 @@
       const detail = document.getElementById('broadcastDetail');
       const inner = document.getElementById('broadcastInner');
 
-      let triggered = false;
-
-      if (timeStr === "12:27") {
-        lastAlertKey = timeStr;
-        triggered = true;
-        if (icon) icon.textContent = "🪥";
-        if (title) title.textContent = "12:27 準備收拾與潔牙提醒";
-        if (detail) {
-          detail.textContent = currentWeekday === 2
-            ? "用餐時間即將結束，請準備收拾餐具，使用含氟漱口水並徹底潔牙！"
-            : "用餐時間即將結束，請準備收拾餐具並攜帶牙刷前往潔牙漱口！";
-        }
-        if (inner) {
-          inner.className = "rounded-3xl p-5 md:p-7 flex items-center border-2 md:border-4 shadow-2xl gap-4 md:gap-6 bg-amber-950/95 text-amber-100 border-amber-400";
-        }
-      } else if (timeStr === "12:37") {
-        lastAlertKey = timeStr;
-        triggered = true;
-        if (icon) icon.textContent = "⏰";
-        if (title) title.textContent = currentWeekday === 3 ? "12:37 放學預備提醒" : "12:37 午休預備提醒";
-        if (detail) {
-          detail.textContent = currentWeekday === 3
-            ? "12:40 即將放學，請加快動作整理環境、檢查書包並將垃圾歸位！"
-            : "即將進入 12:40 預備午休，請加快動作整理環境、洗手如廁並訂正作業！";
-        }
-        if (inner) {
-          inner.className = "rounded-3xl p-5 md:p-7 flex items-center border-2 md:border-4 shadow-2xl gap-4 md:gap-6 bg-indigo-950/95 text-indigo-100 border-indigo-400";
-        }
-      } else if (timeStr === "12:47") {
-        lastAlertKey = timeStr;
-        triggered = true;
-        if (icon) icon.textContent = "💤";
-        if (title) title.textContent = "12:47 桌面淨空，準備熄燈";
-        if (detail) {
-          detail.textContent = "即將進入 12:50 熄燈休息時間，請將桌面完全淨空，輪值生準備拉窗簾與熄燈！";
-        }
-        if (inner) {
-          inner.className = "rounded-3xl p-5 md:p-7 flex items-center border-2 md:border-4 shadow-2xl gap-4 md:gap-6 bg-purple-950/95 text-purple-100 border-purple-400";
-        }
+      if (icon) icon.textContent = matchedAlert.icon || "⏰";
+      if (title) title.textContent = matchedAlert.title || "";
+      if (detail) detail.textContent = matchedAlert.detail || "";
+      if (inner) {
+        inner.className = `rounded-3xl p-5 md:p-7 flex items-center border-2 md:border-4 shadow-2xl gap-4 md:gap-6 ${matchedAlert.styleClass || 'bg-amber-950/95 text-amber-100 border-amber-400'}`;
       }
 
-      if (triggered) {
-        if (card) card.classList.remove('hidden');
-        playChime('alert');
+      if (card) card.classList.remove('hidden');
+      playChime('alert');
 
-        // 設定 3 分鐘後 (180,000 毫秒) 自動消失
-        if (broadcastAutoTimer) clearTimeout(broadcastAutoTimer);
-        broadcastAutoTimer = setTimeout(() => {
-          dismissBroadcast();
-        }, 180000);
-      }
+      // 設定 3 分鐘後 (180,000 毫秒) 自動消失
+      if (broadcastAutoTimer) clearTimeout(broadcastAutoTimer);
+      broadcastAutoTimer = setTimeout(() => {
+        dismissBroadcast();
+      }, 180000);
     }
 
     /* =================================================================

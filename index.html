@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>午間節奏引導 v2.3.7</title>
+  <title>午間節奏引導 v2.3.8</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -40,6 +40,15 @@
       scrollbar-width: none;
     }
 
+    /* 擬真全螢幕備援樣式 */
+    .pseudo-fullscreen {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 9999 !important;
+    }
+
     @keyframes subtle-pulse {
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.02); opacity: 0.92; }
@@ -57,17 +66,17 @@
       <div class="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50"></div>
       <h1 class="text-base md:text-xl font-black tracking-wider text-slate-100 flex items-center gap-2">
         午間節奏引導
-        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-mono border border-emerald-500/30">v2.3.7</span>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-mono border border-emerald-500/30">v2.3.8</span>
         <span id="simBadge" class="hidden text-xs px-2.5 py-0.5 rounded-full bg-amber-900/80 text-amber-300 font-bold border border-amber-500/50 animate-pulse">測試中</span>
       </h1>
 
       <!-- 星期切換狀態器（緊鄰版本序號右側） -->
       <div class="flex items-center gap-1.5 md:gap-2 ml-1 md:ml-2 flex-wrap">
-        <button onclick="switchWeekday(1)" id="btnDay-1" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週一</button>
-        <button onclick="switchWeekday(2)" id="btnDay-2" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週二 (含氟漱口水)</button>
-        <button onclick="switchWeekday(3)" id="btnDay-3" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週三 (12:40放學)</button>
-        <button onclick="switchWeekday(4)" id="btnDay-4" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週四</button>
-        <button onclick="switchWeekday(5)" id="btnDay-5" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週五</button>
+        <button type="button" onclick="switchWeekday(1)" id="btnDay-1" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週一</button>
+        <button type="button" onclick="switchWeekday(2)" id="btnDay-2" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週二 (含氟漱口水)</button>
+        <button type="button" onclick="switchWeekday(3)" id="btnDay-3" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週三 (12:40放學)</button>
+        <button type="button" onclick="switchWeekday(4)" id="btnDay-4" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週四</button>
+        <button type="button" onclick="switchWeekday(5)" id="btnDay-5" class="weekday-btn px-3 md:px-4 py-1 md:py-1.5 rounded-xl font-black text-xs md:text-sm transition-all border-2">週五</button>
       </div>
     </div>
 
@@ -75,7 +84,7 @@
     <div class="flex items-center gap-2 md:gap-3">
       <!-- 全螢幕按鈕 -->
       <div class="relative group">
-        <button onclick="toggleFullScreen()" id="fsBtn" aria-label="全螢幕切換" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xl md:text-2xl shadow-xl shadow-emerald-950/60 transition active:scale-95 border-2 border-emerald-400">
+        <button type="button" onclick="toggleFullScreen()" id="fsBtn" aria-label="全螢幕切換" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xl md:text-2xl shadow-xl shadow-emerald-950/60 transition active:scale-95 border-2 border-emerald-400">
           <span id="fsIcon">⛶</span>
         </button>
         <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-emerald-300 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
@@ -85,7 +94,7 @@
 
       <!-- 行程編修按鈕 -->
       <div class="relative group">
-        <button onclick="toggleScheduleModal(true)" aria-label="行程時間與內容編修" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-indigo-900/70 hover:bg-indigo-800 text-indigo-200 border-2 border-indigo-500/50 text-xl md:text-2xl shadow-xl transition active:scale-95">
+        <button type="button" onclick="toggleScheduleModal(true)" aria-label="行程時間與內容編修" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-indigo-900/70 hover:bg-indigo-800 text-indigo-200 border-2 border-indigo-500/50 text-xl md:text-2xl shadow-xl transition active:scale-95">
           ⚙️
         </button>
         <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-indigo-300 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
@@ -95,7 +104,7 @@
 
       <!-- 提醒音效切換 -->
       <div class="relative group">
-        <button onclick="toggleSound()" id="soundBtn" aria-label="切換音效" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border-2 border-slate-600 text-xl md:text-2xl shadow-xl transition active:scale-95">
+        <button type="button" onclick="toggleSound()" id="soundBtn" aria-label="切換音效" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border-2 border-slate-600 text-xl md:text-2xl shadow-xl transition active:scale-95">
           <span id="soundIcon">🔔</span>
         </button>
         <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-slate-100 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
@@ -105,10 +114,10 @@
 
       <!-- 測試模擬按鈕 -->
       <div class="relative group">
-        <button onclick="toggleTestModal(true)" aria-label="時間效果試閱" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-amber-950/70 hover:bg-amber-800/80 text-amber-200 border-2 border-amber-500/50 text-xl md:text-2xl shadow-xl transition active:scale-95">
+        <button type="button" onclick="toggleTestModal(true)" aria-label="時間效果試閱" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-amber-950/70 hover:bg-amber-800/80 text-amber-200 border-2 border-amber-500/50 text-xl md:text-2xl shadow-xl transition active:scale-95">
           ⏱️
         </button>
-        <div class="absolute -bottom-9 left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-800 text-amber-300 text-xs font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
+        <div class="absolute -bottom-10 right-0 px-3 py-1.5 bg-slate-800 text-amber-300 text-xs md:text-sm font-bold rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition duration-200 whitespace-nowrap border border-slate-600 shadow-xl z-30">
           時間效果試閱（測試模式）
         </div>
       </div>
@@ -170,7 +179,7 @@
               <span class="text-xl md:text-2xl">📋</span>
               <span>今日輪值人員</span>
             </div>
-            <button onclick="toggleDutyModal(true)" class="text-xs md:text-sm px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold border border-slate-700 transition active:scale-95 shadow-md" title="設定座號">
+            <button type="button" onclick="toggleDutyModal(true)" class="text-xs md:text-sm px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold border border-slate-700 transition active:scale-95 shadow-md" title="設定座號">
               ✏️ 選擇座號
             </button>
           </div>
@@ -195,7 +204,7 @@
 
   </main>
 
-  <!-- 關鍵節點提醒浮層 Toast (12:27, 12:37, 12:47 觸發；字體顯著放大；無手動按鈕；3分鐘後自動消失) -->
+  <!-- 關鍵節點提醒浮層 Toast (預設 12:27, 12:37, 12:47 觸發；字體顯著放大；無手動按鈕；3分鐘後自動消失) -->
   <div id="broadcastCard" class="fixed bottom-10 md:bottom-14 left-1/2 -translate-x-1/2 w-[94%] max-w-5xl z-40 hidden transform transition-all duration-500 drop-shadow-2xl">
     <div id="broadcastInner" class="rounded-3xl p-5 md:p-7 flex items-center border-2 md:border-4 shadow-2xl gap-4 md:gap-6 bg-amber-950/95 text-amber-100 border-amber-400">
       <span id="broadcastIcon" class="text-3xl sm:text-4xl md:text-6xl flex-shrink-0 animate-bounce">⏰</span>
@@ -218,14 +227,14 @@
         <h2 class="text-lg md:text-2xl font-black text-white flex items-center gap-2.5">
           <span>📋</span> 今日輪值人員座號選取
         </h2>
-        <button onclick="toggleDutyModal(false)" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-lg font-black border border-slate-700 transition active:scale-95">✕</button>
+        <button type="button" onclick="toggleDutyModal(false)" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-lg font-black border border-slate-700 transition active:scale-95">✕</button>
       </div>
 
       <div class="my-3">
         <div class="flex justify-between items-center mb-2">
           <label class="block text-xs md:text-sm font-bold text-emerald-400">點擊座號進行選取／取消：</label>
           <div class="flex gap-2">
-            <button onclick="clearDutySelection()" class="px-2.5 py-1 bg-slate-800 hover:bg-rose-950 text-rose-300 text-xs font-bold rounded-lg border border-rose-500/40 transition active:scale-95">
+            <button type="button" onclick="clearDutySelection()" class="px-2.5 py-1 bg-slate-800 hover:bg-rose-950 text-rose-300 text-xs font-bold rounded-lg border border-rose-500/40 transition active:scale-95">
               清空
             </button>
           </div>
@@ -243,10 +252,10 @@
       </div>
 
       <div class="pt-3 flex justify-end items-center border-t-2 border-slate-800 gap-3">
-        <button onclick="toggleDutyModal(false)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl border border-slate-700 text-xs md:text-sm transition active:scale-95">
+        <button type="button" onclick="toggleDutyModal(false)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl border border-slate-700 text-xs md:text-sm transition active:scale-95">
           取消
         </button>
-        <button onclick="saveDutyList()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg text-xs md:text-sm transition active:scale-95">
+        <button type="button" onclick="saveDutyList()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg text-xs md:text-sm transition active:scale-95">
           儲存並更新
         </button>
       </div>
@@ -255,63 +264,28 @@
 
   <!-- 測試模式（時間效果試閱）Modal -->
   <div id="testModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden" onclick="handleBackdropClick(event, 'testModal')">
-    <div class="bg-slate-900 border-2 md:border-4 border-amber-600/70 w-full max-w-2xl rounded-3xl p-5 md:p-6 shadow-2xl overflow-hidden flex flex-col" onclick="event.stopPropagation()">
+    <div class="bg-slate-900 border-2 md:border-4 border-amber-600/70 w-full max-w-2xl rounded-3xl p-5 md:p-6 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]" onclick="event.stopPropagation()">
       <div class="flex justify-between items-center pb-3 border-b-2 border-slate-800">
         <div class="flex items-center gap-2.5">
           <span class="text-2xl">⏱️</span>
           <div>
             <h2 class="text-lg md:text-xl font-black text-amber-300">各時間點效果試閱</h2>
-            <p class="text-xs text-slate-400 mt-0.5">點擊各按鈕即可立即模擬該時間點之畫面、進度與提示效果</p>
+            <p class="text-xs text-slate-400 mt-0.5">點擊各按鈕即可立即模擬該時間點之畫面、進度與彈出提醒效果</p>
           </div>
         </div>
-        <button onclick="toggleTestModal(false)" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-lg font-black border border-slate-700 transition active:scale-95">✕</button>
+        <button type="button" onclick="toggleTestModal(false)" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-lg font-black border border-slate-700 transition active:scale-95">✕</button>
       </div>
 
-      <!-- 快速時段試閱按鈕清單 -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 my-4">
-        <button onclick="simulateTime('12:00')" class="p-2.5 bg-slate-800 hover:bg-emerald-950 border border-slate-700 hover:border-emerald-500 rounded-2xl text-left transition active:scale-95">
-          <div class="text-emerald-400 font-digital font-bold text-base md:text-lg">12:00</div>
-          <div class="text-xs font-bold text-slate-200 mt-0.5">🍲 盛飯打菜開始</div>
-        </button>
-        <button onclick="simulateTime('12:15')" class="p-2.5 bg-slate-800 hover:bg-blue-950 border border-slate-700 hover:border-blue-500 rounded-2xl text-left transition active:scale-95">
-          <div class="text-blue-400 font-digital font-bold text-base md:text-lg">12:15</div>
-          <div class="text-xs font-bold text-slate-200 mt-0.5">🍱 安靜用餐時間</div>
-        </button>
-        <button id="testAlertBtn-0" onclick="simulateTime('12:27')" class="p-2.5 bg-amber-950/70 hover:bg-amber-900 border-2 border-amber-500/60 rounded-2xl text-left transition active:scale-95 shadow-md shadow-amber-950/50">
-          <div id="testAlertTime-0" class="text-amber-300 font-digital font-bold text-base md:text-lg">12:27 ⚠️</div>
-          <div id="testAlertTitle-0" class="text-xs font-bold text-amber-200 mt-0.5">🪥 潔牙廣播提醒</div>
-        </button>
-        <button onclick="simulateTime('12:30')" class="p-2.5 bg-slate-800 hover:bg-teal-950 border border-slate-700 hover:border-teal-500 rounded-2xl text-left transition active:scale-95">
-          <div class="text-teal-400 font-digital font-bold text-base md:text-lg">12:30</div>
-          <div class="text-xs font-bold text-slate-200 mt-0.5">🧹 環境整理與潔牙</div>
-        </button>
-        <button id="testAlertBtn-1" onclick="simulateTime('12:37')" class="p-2.5 bg-indigo-950/70 hover:bg-indigo-900 border-2 border-indigo-500/60 rounded-2xl text-left transition active:scale-95 shadow-md shadow-indigo-950/50">
-          <div id="testAlertTime-1" class="text-indigo-300 font-digital font-bold text-base md:text-lg">12:37 ⚠️</div>
-          <div id="testAlertTitle-1" class="text-xs font-bold text-indigo-200 mt-0.5">⏰ 午休預備廣播</div>
-        </button>
-        <button onclick="simulateTime('12:40')" class="p-2.5 bg-slate-800 hover:bg-indigo-950 border border-slate-700 hover:border-indigo-500 rounded-2xl text-left transition active:scale-95">
-          <div class="text-indigo-400 font-digital font-bold text-base md:text-lg">12:40</div>
-          <div class="text-xs font-bold text-slate-200 mt-0.5">🚰 預備午休 (週三放學)</div>
-        </button>
-        <button id="testAlertBtn-2" onclick="simulateTime('12:47')" class="p-2.5 bg-purple-950/70 hover:bg-purple-900 border-2 border-purple-500/60 rounded-2xl text-left transition active:scale-95 shadow-md shadow-purple-950/50">
-          <div id="testAlertTime-2" class="text-purple-300 font-digital font-bold text-base md:text-lg">12:47 ⚠️</div>
-          <div id="testAlertTitle-2" class="text-xs font-bold text-purple-200 mt-0.5">💤 熄燈提醒廣播</div>
-        </button>
-        <button onclick="simulateTime('12:50')" class="p-2.5 bg-slate-800 hover:bg-purple-950 border border-slate-700 hover:border-purple-500 rounded-2xl text-left transition active:scale-95">
-          <div class="text-purple-400 font-digital font-bold text-base md:text-lg">12:50</div>
-          <div class="text-xs font-bold text-slate-200 mt-0.5">🌙 熄燈休息時間</div>
-        </button>
-        <button onclick="simulateTime('13:20')" class="p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl text-left transition active:scale-95">
-          <div class="text-slate-300 font-digital font-bold text-base md:text-lg">13:20</div>
-          <div class="text-xs font-bold text-slate-200 mt-0.5">✨ 午休結束</div>
-        </button>
+      <!-- 動態時段試閱按鈕清單 (自動同步當前星期的行程與未刪除之提示時間) -->
+      <div id="testButtonsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 my-4 overflow-y-auto no-scrollbar pr-1">
+        <!-- JS 動態生成 -->
       </div>
 
       <div class="pt-3 flex flex-wrap justify-between items-center border-t-2 border-slate-800 gap-3">
-        <button onclick="resetRealTime()" class="px-4 py-2 bg-rose-950/60 hover:bg-rose-900 border border-rose-500/50 text-rose-200 font-bold rounded-xl text-xs md:text-sm transition active:scale-95 flex items-center gap-1.5">
+        <button type="button" onclick="resetRealTime()" class="px-4 py-2 bg-rose-950/60 hover:bg-rose-900 border border-rose-500/50 text-rose-200 font-bold rounded-xl text-xs md:text-sm transition active:scale-95 flex items-center gap-1.5">
           <span>🔄 恢復即時系統時間</span>
         </button>
-        <button onclick="toggleTestModal(false)" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl border border-slate-700 text-xs md:text-sm transition active:scale-95">
+        <button type="button" onclick="toggleTestModal(false)" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl border border-slate-700 text-xs md:text-sm transition active:scale-95">
           關閉選單
         </button>
       </div>
@@ -327,21 +301,26 @@
             <span>⚙️</span> 行程時間與內容編修
           </h2>
           <p class="text-slate-400 text-xs mt-0.5">
-            目前編輯：<span id="scheduleModalDayLabel" class="text-indigo-400 font-bold">週一</span> 之排程與提示時間
+            目前編輯：<span id="scheduleModalDayLabel" class="text-indigo-400 font-bold">週一</span> 之排程與彈出提醒視窗設定
           </p>
         </div>
-        <button onclick="toggleScheduleModal(false)" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-lg font-black border border-slate-700 transition active:scale-95">✕</button>
+        <button type="button" onclick="toggleScheduleModal(false)" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-lg font-black border border-slate-700 transition active:scale-95">✕</button>
       </div>
 
       <!-- 動態行程階段與階段轉換提示清單 -->
       <div class="my-3 overflow-y-auto space-y-5 no-scrollbar pr-1 flex-1">
-        <!-- 12:27, 12:37, 12:47 提示時間編修區 -->
+        <!-- 12:27, 12:37, 12:47 提示時間編修區 (支援個別刪除與新增) -->
         <div class="bg-slate-950/70 p-3.5 md:p-4 rounded-2xl border border-amber-500/40">
-          <div class="flex items-center justify-between mb-2.5">
-            <h3 class="text-sm md:text-base font-black text-amber-300 flex items-center gap-2">
-              <span>⏰</span> 階段轉換提示時間與內容編修（預設 12:27、12:37、12:47）
-            </h3>
-            <span class="text-xs text-slate-400 font-bold">觸發後自動顯示 3 分鐘</span>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-sm md:text-base font-black text-amber-300 flex items-center gap-2">
+                <span>⏰</span> 階段轉換彈出提醒視窗編修（預設 12:27、12:37、12:47）
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">可自由修改或點擊右側「刪除提醒」取消該時段的彈出視窗（觸發後自動顯示 3 分鐘）</p>
+            </div>
+            <button type="button" onclick="addAlertItem()" class="px-3 py-1.5 bg-amber-950/80 hover:bg-amber-900 text-amber-300 font-bold rounded-xl border border-amber-500/40 text-xs transition active:scale-95">
+              + 新增彈出提醒
+            </button>
           </div>
           <div class="space-y-2.5" id="alertItemsContainer">
             <!-- JS 動態渲染提示時間設定 -->
@@ -361,14 +340,14 @@
 
       <div class="pt-3 flex flex-wrap justify-between items-center border-t-2 border-slate-800 gap-2">
         <div class="flex items-center gap-2">
-          <button onclick="addSchedulePhase()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 font-bold rounded-xl border border-indigo-500/40 text-xs md:text-sm transition active:scale-95">
+          <button type="button" onclick="addSchedulePhase()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 font-bold rounded-xl border border-indigo-500/40 text-xs md:text-sm transition active:scale-95">
             + 新增時段
           </button>
-          <button onclick="resetScheduleToDefault()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-rose-950/60 text-rose-300 font-bold rounded-xl border border-rose-500/40 text-xs md:text-sm transition active:scale-95">
-            恢復預設行程
+          <button type="button" onclick="resetScheduleToDefault()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-rose-950/60 text-rose-300 font-bold rounded-xl border border-rose-500/40 text-xs md:text-sm transition active:scale-95">
+            恢復預設行程與提醒
           </button>
         </div>
-        <button onclick="saveScheduleList()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg text-sm md:text-base transition active:scale-95">
+        <button type="button" onclick="saveScheduleList()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg text-sm md:text-base transition active:scale-95">
           儲存並套用行程
         </button>
       </div>
@@ -386,6 +365,7 @@
     let audioCtx = null;
     let simulatedTime = null; // 儲存測試時段 (如 "12:27")
     let broadcastAutoTimer = null; // 3分鐘自動關閉計時器
+    let isPseudoFullscreen = false; // 擬真全螢幕狀態備援
 
     // 今日輪值人員座號清單（預設數字 1 至 4，純數字不帶「號」）
     let selectedDutySeats = [1, 2, 3, 4];
@@ -591,9 +571,19 @@
     };
 
     function timeToMinutes(tStr) {
-      if (!tStr) return 0;
+      if (!tStr || typeof tStr !== 'string') return 0;
       const parts = tStr.split(':').map(Number);
-      return parts[0] * 60 + (parts[1] || 0);
+      return (parts[0] || 0) * 60 + (parts[1] || 0);
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     /* =================================================================
@@ -607,7 +597,7 @@
         }
       }
       if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
+        audioCtx.resume().catch(() => {});
       }
     }
 
@@ -660,32 +650,57 @@
     }
 
     /* =================================================================
-       全螢幕與視窗互動控制
+       全螢幕與視窗互動控制 (支援標準 API 與擬真全螢幕備援)
        ================================================================= */
+    function updateFullscreenIcon() {
+      const fsIcon = document.getElementById('fsIcon');
+      const isNativeFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      if (fsIcon) {
+        fsIcon.textContent = (isNativeFs || isPseudoFullscreen) ? '🗗' : '⛶';
+      }
+    }
+
     function toggleFullScreen() {
       initAudioContext();
-      if (!document.fullscreenElement) {
-        const docEl = document.documentElement;
+      const docEl = document.documentElement;
+      const isNativeFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+
+      if (!isNativeFs && !isPseudoFullscreen) {
         if (docEl.requestFullscreen) {
-          docEl.requestFullscreen().catch(() => {});
+          docEl.requestFullscreen().catch(() => {
+            enablePseudoFullscreen(true);
+          });
         } else if (docEl.webkitRequestFullscreen) {
-          docEl.webkitRequestFullscreen();
+          try {
+            docEl.webkitRequestFullscreen();
+          } catch (e) {
+            enablePseudoFullscreen(true);
+          }
+        } else {
+          enablePseudoFullscreen(true);
         }
       } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
+        if (isNativeFs) {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          }
+        }
+        if (isPseudoFullscreen) {
+          enablePseudoFullscreen(false);
         }
       }
     }
 
-    document.addEventListener('fullscreenchange', () => {
-      const fsIcon = document.getElementById('fsIcon');
-      if (fsIcon) {
-        fsIcon.textContent = document.fullscreenElement ? '🗗' : '⛶';
-      }
-    });
+    function enablePseudoFullscreen(enable) {
+      isPseudoFullscreen = enable;
+      document.body.classList.toggle('pseudo-fullscreen', enable);
+      updateFullscreenIcon();
+    }
+
+    document.addEventListener('fullscreenchange', updateFullscreenIcon);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
 
     function handleBackdropClick(event, modalId) {
       if (event.target && event.target.id === modalId) {
@@ -701,6 +716,8 @@
     function switchWeekday(day) {
       initAudioContext();
       currentWeekday = day;
+      lastAlertKey = null;
+      dismissBroadcast();
 
       for (let i = 1; i <= 5; i++) {
         const btn = document.getElementById(`btnDay-${i}`);
@@ -735,7 +752,6 @@
 
       const sorted = [...selectedDutySeats].sort((a, b) => a - b);
       const formatted = sorted.map(num => String(num).padStart(2, '0'));
-      // 4 人（含）以下每橫排顯示 2 個號碼；5 人（含）以上每橫排顯示 3 個號碼
       const perRow = formatted.length <= 4 ? 2 : 3;
 
       const rows = [];
@@ -808,28 +824,79 @@
     }
 
     /* =================================================================
-       測試模式（時間效果試閱）控制邏輯
+       測試模式（時間效果試閱）控制邏輯 (自動反應當前行程與有效提醒)
        ================================================================= */
+    function renderTestModalButtons() {
+      const grid = document.getElementById('testButtonsGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const schedule = weeklySchedules[currentWeekday] || [];
+      const alerts = weeklyAlerts[currentWeekday] || [];
+
+      const testItems = [];
+
+      // 納入所有主行程階段起點
+      schedule.forEach((phase) => {
+        if (phase.start) {
+          testItems.push({
+            time: phase.start,
+            label: `${phase.icon || '🕒'} ${phase.title || '階段開始'}`,
+            isAlert: false
+          });
+        }
+      });
+
+      // 納入所有啟用中之彈出提醒時間點 (若已刪除則不會出現)
+      alerts.forEach((alertItem) => {
+        if (alertItem.time) {
+          const cleanTitle = (alertItem.title || '').replace(/^\d{1,2}:\d{2}\s*/, '');
+          testItems.push({
+            time: alertItem.time,
+            label: `${alertItem.icon || '⏰'} ${cleanTitle || '階段轉換提醒'}`,
+            isAlert: true
+          });
+        }
+      });
+
+      // 納入午休結束時間點
+      const endTime = schedule.length > 0 ? schedule[schedule.length - 1].end : "13:20";
+      testItems.push({
+        time: endTime || "13:20",
+        label: "✨ 午休結束",
+        isAlert: false
+      });
+
+      // 依時間排序
+      testItems.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+
+      testItems.forEach((item) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => simulateTime(item.time);
+
+        if (item.isAlert) {
+          btn.className = "p-2.5 bg-amber-950/75 hover:bg-amber-900 border-2 border-amber-500/70 rounded-2xl text-left transition active:scale-95 shadow-md shadow-amber-950/50";
+          btn.innerHTML = `
+            <div class="text-amber-300 font-digital font-bold text-base md:text-lg">${escapeHtml(item.time)} ⚠️</div>
+            <div class="text-xs font-bold text-amber-100 mt-0.5 truncate">${escapeHtml(item.label)}</div>
+          `;
+        } else {
+          btn.className = "p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500 rounded-2xl text-left transition active:scale-95";
+          btn.innerHTML = `
+            <div class="text-emerald-400 font-digital font-bold text-base md:text-lg">${escapeHtml(item.time)}</div>
+            <div class="text-xs font-bold text-slate-200 mt-0.5 truncate">${escapeHtml(item.label)}</div>
+          `;
+        }
+        grid.appendChild(btn);
+      });
+    }
+
     function toggleTestModal(show) {
       initAudioContext();
       const modal = document.getElementById('testModal');
       if (show) {
-        const currentAlerts = weeklyAlerts[currentWeekday] || [];
-        currentAlerts.forEach((alertObj, idx) => {
-          const btn = document.getElementById(`testAlertBtn-${idx}`);
-          const timeEl = document.getElementById(`testAlertTime-${idx}`);
-          const titleEl = document.getElementById(`testAlertTitle-${idx}`);
-          if (btn && alertObj.time) {
-            btn.setAttribute('onclick', `simulateTime('${alertObj.time}')`);
-          }
-          if (timeEl && alertObj.time) {
-            timeEl.textContent = `${alertObj.time} ⚠️`;
-          }
-          if (titleEl) {
-            const cleanTitle = (alertObj.title || '').replace(/^\d{1,2}:\d{2}\s*/, '');
-            titleEl.textContent = `${alertObj.icon || '⏰'} ${cleanTitle || '階段轉換提醒'}`;
-          }
-        });
+        renderTestModalButtons();
         modal.classList.remove('hidden');
       } else {
         modal.classList.add('hidden');
@@ -868,7 +935,7 @@
     }
 
     /* =================================================================
-       行程時間與內容編修
+       行程時間與內容編修 (含提示時間刪除與新增)
        ================================================================= */
     const WEEKDAY_NAMES = { 1: "週一", 2: "週二", 3: "週三", 4: "週四", 5: "週五" };
 
@@ -892,27 +959,44 @@
 
       const currentAlerts = weeklyAlerts[currentWeekday] || [];
 
+      if (currentAlerts.length === 0) {
+        container.innerHTML = `
+          <div class="text-slate-400 text-xs md:text-sm text-center py-4 bg-slate-900/60 rounded-xl border border-dashed border-slate-700">
+            目前本星期已關閉所有彈出提醒視窗。如需啟用，請點擊右上角「+ 新增彈出提醒」或下方「恢復預設行程與提醒」。
+          </div>
+        `;
+        return;
+      }
+
       currentAlerts.forEach((alertItem, idx) => {
         const card = document.createElement('div');
         card.className = "bg-slate-900/95 p-3 rounded-2xl border border-slate-700/90 flex flex-col gap-2";
         card.innerHTML = `
-          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+              <span>🔔 彈出提醒 ${idx + 1}</span>
+            </span>
+            <button type="button" onclick="removeAlertItem(${idx})" class="text-rose-400 hover:text-rose-200 hover:bg-rose-900/60 font-bold text-xs px-2.5 py-1 bg-rose-950/50 rounded-lg border border-rose-700/50 transition active:scale-95 flex items-center gap-1">
+              <span>🗑️ 刪除提醒</span>
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center pt-1">
             <div class="sm:col-span-3">
-              <label class="block text-xs font-bold text-amber-300 mb-1">提示時間 ${idx + 1}</label>
-              <input type="time" value="${alertItem.time}" oninput="updateAlertField(${idx}, 'time', this.value)" class="w-full bg-slate-950 border border-amber-500/50 rounded-xl px-2.5 py-1.5 text-amber-200 font-mono text-sm font-bold focus:outline-none focus:border-amber-400">
+              <label class="block text-xs font-bold text-amber-300 mb-1">提示時間</label>
+              <input type="time" value="${escapeHtml(alertItem.time)}" oninput="updateAlertField(${idx}, 'time', this.value)" class="w-full bg-slate-950 border border-amber-500/50 rounded-xl px-2.5 py-1.5 text-amber-200 font-mono text-sm font-bold focus:outline-none focus:border-amber-400">
             </div>
             <div class="sm:col-span-2">
               <label class="block text-xs font-bold text-slate-400 mb-1">圖示</label>
-              <input type="text" value="${alertItem.icon || '⏰'}" oninput="updateAlertField(${idx}, 'icon', this.value)" class="w-full text-center bg-slate-950 border border-slate-700 rounded-xl px-2 py-1.5 text-sm focus:outline-none focus:border-amber-400" title="提示圖示">
+              <input type="text" value="${escapeHtml(alertItem.icon || '⏰')}" oninput="updateAlertField(${idx}, 'icon', this.value)" class="w-full text-center bg-slate-950 border border-slate-700 rounded-xl px-2 py-1.5 text-sm focus:outline-none focus:border-amber-400" title="提示圖示">
             </div>
             <div class="sm:col-span-7">
               <label class="block text-xs font-bold text-slate-400 mb-1">提示標題</label>
-              <input type="text" id="alertTitleInput-${idx}" value="${alertItem.title}" oninput="updateAlertField(${idx}, 'title', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white text-sm font-bold focus:outline-none focus:border-amber-400" placeholder="提示標題">
+              <input type="text" id="alertTitleInput-${idx}" value="${escapeHtml(alertItem.title)}" oninput="updateAlertField(${idx}, 'title', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white text-sm font-bold focus:outline-none focus:border-amber-400" placeholder="提示標題">
             </div>
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-400 mb-1">彈出視窗提醒內容</label>
-            <input type="text" value="${alertItem.detail}" oninput="updateAlertField(${idx}, 'detail', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-200 text-xs font-medium focus:outline-none focus:border-amber-400" placeholder="提醒詳細說明">
+            <input type="text" value="${escapeHtml(alertItem.detail)}" oninput="updateAlertField(${idx}, 'detail', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-200 text-xs font-medium focus:outline-none focus:border-amber-400" placeholder="提醒詳細說明">
           </div>
         `;
         container.appendChild(card);
@@ -936,6 +1020,26 @@
       }
     }
 
+    function removeAlertItem(idx) {
+      initAudioContext();
+      if (!weeklyAlerts[currentWeekday]) return;
+      weeklyAlerts[currentWeekday].splice(idx, 1);
+      renderAlertInputs();
+    }
+
+    function addAlertItem() {
+      initAudioContext();
+      if (!weeklyAlerts[currentWeekday]) weeklyAlerts[currentWeekday] = [];
+      weeklyAlerts[currentWeekday].push({
+        time: "12:27",
+        icon: "⏰",
+        title: "12:27 階段轉換提醒",
+        detail: "請同學注意時間，準備進入下一階段！",
+        styleClass: "bg-amber-950/95 text-amber-100 border-amber-400"
+      });
+      renderAlertInputs();
+    }
+
     function renderScheduleInputs() {
       const container = document.getElementById('scheduleItemsContainer');
       if (!container) return;
@@ -944,7 +1048,7 @@
       const currentList = weeklySchedules[currentWeekday] || [];
 
       if (currentList.length === 0) {
-        container.innerHTML = `<div class="text-slate-400 text-center py-6">目前無任何時段，請點擊下方新增。</div>`;
+        container.innerHTML = `<div class="text-slate-400 text-center py-6 bg-slate-900/60 rounded-xl border border-dashed border-slate-700">目前無任何時段，請點擊下方「+ 新增時段」。</div>`;
         return;
       }
 
@@ -955,29 +1059,29 @@
           <div class="flex items-center justify-between gap-3 border-b border-slate-700/60 pb-2">
             <span class="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
               <span>階段 ${idx + 1}</span>
-              <input type="text" value="${phase.icon || '🍲'}" oninput="updatePhaseField(${idx}, 'icon', this.value)" class="w-8 text-center bg-slate-900 border border-slate-700 rounded-lg py-0.5 text-sm" title="階段圖示">
+              <input type="text" value="${escapeHtml(phase.icon || '🍲')}" oninput="updatePhaseField(${idx}, 'icon', this.value)" class="w-9 text-center bg-slate-900 border border-slate-700 rounded-lg py-0.5 text-sm" title="階段圖示">
             </span>
-            <button onclick="removeSchedulePhase(${idx})" class="text-rose-400 hover:text-rose-300 font-bold text-xs px-2 py-1 bg-rose-950/40 rounded-lg border border-rose-800/40 transition active:scale-95">
+            <button type="button" onclick="removeSchedulePhase(${idx})" class="text-rose-400 hover:text-rose-300 font-bold text-xs px-2.5 py-1 bg-rose-950/40 rounded-lg border border-rose-800/40 transition active:scale-95">
               刪除階段
             </button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
             <div>
               <label class="block text-xs font-bold text-slate-400 mb-1">開始時間</label>
-              <input type="time" value="${phase.start}" oninput="updatePhaseField(${idx}, 'start', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-sm font-bold focus:outline-none focus:border-indigo-500">
+              <input type="time" value="${escapeHtml(phase.start)}" oninput="updatePhaseField(${idx}, 'start', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-sm font-bold focus:outline-none focus:border-indigo-500">
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-400 mb-1">結束時間</label>
-              <input type="time" value="${phase.end}" oninput="updatePhaseField(${idx}, 'end', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-sm font-bold focus:outline-none focus:border-indigo-500">
+              <input type="time" value="${escapeHtml(phase.end)}" oninput="updatePhaseField(${idx}, 'end', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-sm font-bold focus:outline-none focus:border-indigo-500">
             </div>
             <div class="sm:col-span-2">
               <label class="block text-xs font-bold text-slate-400 mb-1">階段名稱</label>
-              <input type="text" value="${phase.title}" oninput="updatePhaseField(${idx}, 'title', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white text-sm font-bold focus:outline-none focus:border-indigo-500" placeholder="階段名稱">
+              <input type="text" value="${escapeHtml(phase.title)}" oninput="updatePhaseField(${idx}, 'title', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white text-sm font-bold focus:outline-none focus:border-indigo-500" placeholder="階段名稱">
             </div>
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-400 mb-1">動作說明內容</label>
-            <input type="text" value="${phase.subtext}" oninput="updatePhaseField(${idx}, 'subtext', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-200 text-xs font-medium focus:outline-none focus:border-indigo-500" placeholder="階段詳細說明">
+            <input type="text" value="${escapeHtml(phase.subtext)}" oninput="updatePhaseField(${idx}, 'subtext', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-200 text-xs font-medium focus:outline-none focus:border-indigo-500" placeholder="階段詳細說明">
           </div>
         `;
         container.appendChild(card);
@@ -991,11 +1095,12 @@
     }
 
     function addSchedulePhase() {
+      initAudioContext();
       if (!weeklySchedules[currentWeekday]) weeklySchedules[currentWeekday] = [];
       const currentList = weeklySchedules[currentWeekday];
       let newStart = "12:00";
       if (currentList.length > 0) {
-        newStart = currentList[currentList.length - 1].end;
+        newStart = currentList[currentList.length - 1].end || "12:00";
       }
       currentList.push({
         start: newStart,
@@ -1011,6 +1116,7 @@
     }
 
     function removeSchedulePhase(idx) {
+      initAudioContext();
       if (weeklySchedules[currentWeekday]) {
         weeklySchedules[currentWeekday].splice(idx, 1);
         renderScheduleInputs();
@@ -1018,6 +1124,7 @@
     }
 
     function resetScheduleToDefault() {
+      initAudioContext();
       if (currentWeekday === 2) {
         weeklySchedules[2] = JSON.parse(JSON.stringify(DEFAULT_TUESDAY_SCHEDULE));
       } else if (currentWeekday === 3) {
@@ -1033,6 +1140,7 @@
     function saveScheduleList() {
       toggleScheduleModal(false);
       lastAlertKey = null;
+      dismissBroadcast();
       updateRhythm();
       playChime('normal');
     }
@@ -1056,7 +1164,7 @@
 
       if (simulatedTime) {
         const parts = simulatedTime.split(':').map(Number);
-        currentHour = parts[0];
+        currentHour = parts[0] || 0;
         currentMinute = parts[1] || 0;
         currentTotalMinutes = currentHour * 60 + currentMinute;
       } else {
@@ -1076,7 +1184,7 @@
         clockEl.textContent = timeStr;
       }
 
-      const schedule = weeklySchedules[currentWeekday] || DEFAULT_GENERAL_SCHEDULE;
+      const schedule = weeklySchedules[currentWeekday] || [];
       let activePhase = null;
       let activeIndex = -1;
 
@@ -1108,16 +1216,16 @@
         const progressPct = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
 
         if (phaseTag) {
-          phaseTag.className = `px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl lg:text-3xl font-black tracking-wider uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 border-2 md:border-4 ${activePhase.colorClass}`;
+          phaseTag.className = `px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl lg:text-3xl font-black tracking-wider uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 border-2 md:border-4 ${activePhase.colorClass || 'bg-emerald-600 text-white border-emerald-400'}`;
         }
-        if (phaseIcon) phaseIcon.textContent = activePhase.icon;
-        if (phaseTitle) phaseTitle.textContent = activePhase.title;
-        if (phaseSubtext) phaseSubtext.textContent = activePhase.subtext;
+        if (phaseIcon) phaseIcon.textContent = activePhase.icon || '🕒';
+        if (phaseTitle) phaseTitle.textContent = activePhase.title || '';
+        if (phaseSubtext) phaseSubtext.textContent = activePhase.subtext || '';
 
         if (countdownText) countdownText.textContent = `${minutesLeft} 分鐘`;
         if (progressBar) {
           progressBar.style.width = `${progressPct}%`;
-          progressBar.className = `h-full bg-gradient-to-r ${activePhase.barColor} rounded-full transition-all duration-500 ease-out`;
+          progressBar.className = `h-full bg-gradient-to-r ${activePhase.barColor || 'from-emerald-500 to-teal-400'} rounded-full transition-all duration-500 ease-out`;
         }
 
         if (nextPhaseName) {
@@ -1131,10 +1239,22 @@
         if (ambientGlow) {
           ambientGlow.style.backgroundColor = activePhase.glowColor || 'rgba(16, 185, 129, 0.2)';
         }
+      } else if (schedule.length === 0) {
+        // 防呆：當所有階段皆被刪除時
+        if (phaseTag) {
+          phaseTag.className = "px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl lg:text-3xl font-black tracking-wider uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 bg-slate-800 text-slate-300 border-2 border-slate-700";
+        }
+        if (phaseIcon) phaseIcon.textContent = "⚙️";
+        if (phaseTitle) phaseTitle.textContent = "尚未設定時段";
+        if (phaseSubtext) phaseSubtext.textContent = "請點擊右上角齒輪新增或恢復預設午間行程";
+        if (countdownText) countdownText.textContent = "-- 分鐘";
+        if (nextPhaseName) nextPhaseName.textContent = "--";
+        if (progressBar) progressBar.style.width = "0%";
       } else {
-        // 非排程時段
-        if (currentTotalMinutes < timeToMinutes(schedule[0].start)) {
-          const diff = timeToMinutes(schedule[0].start) - currentTotalMinutes;
+        // 非排程時段（開始前或結束後）
+        const firstStartMin = timeToMinutes(schedule[0].start);
+        if (currentTotalMinutes < firstStartMin) {
+          const diff = firstStartMin - currentTotalMinutes;
           if (phaseTag) {
             phaseTag.className = "px-6 md:px-9 py-2 md:py-3 rounded-full text-lg md:text-2xl lg:text-3xl font-black tracking-wider uppercase shadow-2xl transition-all duration-500 flex items-center gap-3 bg-slate-800 text-slate-300 border-2 border-slate-700";
           }
@@ -1166,7 +1286,7 @@
       const matchedAlert = currentAlerts.find(a => a.time === timeStr);
 
       // 當進入各主要階段起點且非提示時間時，自動清除前階段提醒
-      const schedule = weeklySchedules[currentWeekday] || DEFAULT_GENERAL_SCHEDULE;
+      const schedule = weeklySchedules[currentWeekday] || [];
       const isPhaseStart = schedule.some(p => p.start === timeStr);
       if (isPhaseStart && !matchedAlert) {
         dismissBroadcast();
@@ -1174,7 +1294,7 @@
 
       if (!matchedAlert) return;
 
-      const alertKey = `${currentWeekday}-${timeStr}`;
+      const alertKey = `${currentWeekday}-${timeStr}-${matchedAlert.title}`;
       if (alertKey === lastAlertKey) return;
       lastAlertKey = alertKey;
 
@@ -1210,6 +1330,9 @@
         toggleDutyModal(false);
         toggleTestModal(false);
         dismissBroadcast();
+        if (isPseudoFullscreen) {
+          enablePseudoFullscreen(false);
+        }
       }
     });
 
